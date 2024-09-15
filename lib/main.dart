@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:movies_app/Presentation/Screens/browse/BrowseListTab.dart';
-import 'package:movies_app/Presentation/SplashScreen/splashScreen.dart';
-
-import 'package:movies_app/widgets/bottomNav.dart';
-import 'package:movies_app/Presentation/Screens/homeScreen/HomeTab.dart';
 import 'package:movies_app/Presentation/Screens/SearchScreen/SearchTab.dart';
+import 'package:movies_app/Presentation/Screens/browse/BrowseListTab.dart';
+import 'package:movies_app/Presentation/Screens/homeScreen/homeScreen.dart';
 import 'package:movies_app/Presentation/Screens/watchListScreen/WatchListTab.dart';
+import 'package:movies_app/Presentation/SplashScreen/splashScreen.dart';
+import 'package:movies_app/widgets/bottomNav.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -26,12 +25,11 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           initialRoute: SplashScreen.routename,
           routes: {
-            SplashScreen.routename: (context) => SplashScreen(),
-            HomeScreen.routename: (context) => HomeScreen(),
-            BrowseListTab.routename: (context) => BrowseListTab(),
             HomeTab.routename: (context) => HomeTab(),
-            SearchTab.routename: (context) => SearchTab(),
-            WatchListTab.routename: (context) => WatchListTab(),
+            SplashScreen.routename: (context) => const SplashScreen(),
+            BrowseListTab.routename: (context) => const BrowseListTab(),
+            SearchTab.routename: (context) => const SearchTab(),
+            WatchListTab.routename: (context) => const WatchListTab(),
           },
         );
       },
