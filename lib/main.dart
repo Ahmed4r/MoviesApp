@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:movies_app/Presentation/browse/BrowseListTab.dart';
+import 'package:movies_app/Presentation/Screens/browse/BrowseListTab.dart';
+import 'package:movies_app/Presentation/SplashScreen/splashScreen.dart';
 
 import 'package:movies_app/widgets/bottomNav.dart';
-import 'package:movies_app/Presentation/homeScreen/HomeTab.dart';
-import 'package:movies_app/Presentation/SearchScreen/SearchTab.dart';
-import 'package:movies_app/Presentation/watchListScreen/WatchListTab.dart';
-import 'package:movies_app/Presentation/SplashScreen/splashScreen.dart';
+import 'package:movies_app/Presentation/Screens/homeScreen/HomeTab.dart';
+import 'package:movies_app/Presentation/Screens/SearchScreen/SearchTab.dart';
+import 'package:movies_app/Presentation/Screens/watchListScreen/WatchListTab.dart';
 
 void main() {
   runApp(MyApp());

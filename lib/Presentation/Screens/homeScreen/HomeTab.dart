@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:movies_app/Presentation/homeScreen/build%20item.dart';
-import 'package:movies_app/Presentation/homeScreen/new%20release%20item.dart';
+import 'package:movies_app/Presentation/Screens/homeScreen/build%20item.dart';
+import 'package:movies_app/Presentation/Screens/homeScreen/new%20release%20item.dart';
 
 class HomeTab extends StatelessWidget {
   static const String routename = 'hometab';
