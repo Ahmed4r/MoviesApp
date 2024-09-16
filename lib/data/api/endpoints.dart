@@ -1,8 +1,8 @@
 class Endpoints {
   //Home Screen
-  static const String Recommended = '/3/movie/top_rated';
-  static const String New_Realeases = '/3/movie/upcoming';
-  static const String top_side_section = '/3/movie/popular';
+  static const String Recommended = '3/movie/top_rated';
+  static const String New_Realeases = '3/movie/upcoming';
+  static const String top_side_section = '3/movie/popular';
 
   //Movie Details:
   static const String Movie_Details = 'movie/{movie_id}';

@@ -7,8 +7,11 @@ import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabStates.d
 
 import 'package:movies_app/data/api/Api_manger.dart';
 import 'package:movies_app/data/api/const.dart';
+import 'package:movies_app/model/hometabmodel/NewRealeases.dart';
+import 'package:movies_app/model/hometabmodel/RecommendedResponse.dart';
 import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
-import 'package:movies_app/widgets/customviewMovies.dart';
+import 'package:movies_app/widgets/NewRealsesWidget.dart';
+import 'package:movies_app/widgets/RecommndedWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeTab extends StatefulWidget {
@@ -21,6 +24,8 @@ class HomeTab extends StatefulWidget {
 }
 
 late Future<List<Movie>> popularMovies;
+late Future<List<Results>> NewrealeasesMovies;
+late Future<List<RecommdedData>> RecommndedMovies;
 
 class _HomeTabState extends State<HomeTab> {
   bool isfav = false;
@@ -28,6 +33,8 @@ class _HomeTabState extends State<HomeTab> {
   void initState() {
     super.initState();
     popularMovies = ApiManager.getAllTopSide();
+    NewrealeasesMovies = ApiManager.getNewRealeases();
+    RecommndedMovies = ApiManager.getRecommended();
   }
 
   final Uri _url = Uri.parse('https://www.youtube.com/watch?v=gUTtJjV852c');
@@ -178,8 +185,8 @@ class _HomeTabState extends State<HomeTab> {
                   color: const Color(0xff282A28),
                   height: 187.h,
                   width: 455.w,
-                  child: Customviewmovies(
-                    snapshot: snap,
+                  child: Newrealseswidget(
+                    snapshot: ApiManager.getNewRealeases(),
                     isfav: isfav,
                     toggleBookmark: toggleBookmark,
                     title: 'New Releases',
@@ -190,9 +197,9 @@ class _HomeTabState extends State<HomeTab> {
                   color: const Color(0xff282A28),
                   height: 187.h,
                   width: 455.w,
-                  child: Customviewmovies(
+                  child: Recommndedwidget(
                     isfav: isfav,
-                    snapshot: snap,
+                    snapshot: ApiManager.getRecommended(),
                     title: 'Recommended',
                     toggleBookmark: toggleBookmark,
                   ),
