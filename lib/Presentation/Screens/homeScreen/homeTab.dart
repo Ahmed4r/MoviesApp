@@ -1,10 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/MoviesDetails.dart';
-import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabStates.dart';
-
 import 'package:movies_app/data/api/Api_manger.dart';
 import 'package:movies_app/data/api/const.dart';
 import 'package:movies_app/model/hometabmodel/NewRealeases.dart';
@@ -28,6 +24,7 @@ late Future<List<Results>> NewrealeasesMovies;
 late Future<List<RecommdedData>> RecommndedMovies;
 
 class _HomeTabState extends State<HomeTab> {
+  final Map<int?, bool> _favoriteMovies = {};
   bool isfav = false;
   @override
   void initState() {
@@ -37,7 +34,7 @@ class _HomeTabState extends State<HomeTab> {
     RecommndedMovies = ApiManager.getRecommended();
   }
 
-  final Uri _url = Uri.parse('https://www.youtube.com/watch?v=gUTtJjV852c');
+  final Uri _url = Uri.parse('https://www.youtube.com/watch?v=hJiPAJKjUVg');
 
   void toggleBookmark() {
     setState(() {
