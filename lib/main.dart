@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           routes: {
             HomeTab.routename: (context) => HomeTab(),
             SplashScreen.routename: (context) => const SplashScreen(),
-            BrowseListTab.routename: (context) => const BrowseListTab(),
+            BrowseListTab.routename: (context) => BrowseListTab(),
             SearchTab.routename: (context) => const SearchTab(),
             WatchListTab.routename: (context) => const WatchListTab(),
             MoviesDetails.routeName: (context) => const MoviesDetails(),
