@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies_app/Presentation/Screens/browse/BrowseListTab.dart';
 
 import 'package:movies_app/Presentation/Screens/SearchScreen/SearchTab.dart';
-import 'package:movies_app/Presentation/Screens/homeScreen/homeScreen.dart';
+import 'package:movies_app/Presentation/Screens/homeScreen/homeTab.dart';
 import 'package:movies_app/Presentation/Screens/watchListScreen/WatchListTab.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,9 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> screens = [
     HomeTab(),
-    SearchTab(),
-    BrowseListTab(),
-    WatchListTab(),
+    const SearchTab(),
+    const BrowseListTab(),
+    const WatchListTab(),
   ];
 
   void onTabTapped(int index) {
