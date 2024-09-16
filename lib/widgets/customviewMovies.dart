@@ -3,40 +3,37 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/data/api/const.dart';
 import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
 
-class Customviewmovies extends StatefulWidget {
+class Customviewmovies extends StatelessWidget {
+  final bool isfav;
   final AsyncSnapshot<List<Movie>> snapshot;
   final String title;
-  final String movieId; // Unique identifier for each movie
-  final Function(String) onToggleFavorite;
+
+  final VoidCallback toggleBookmark;
 
   Customviewmovies({
+    required this.isfav,
     required this.snapshot,
     super.key,
     required this.title,
-    required this.movieId,
-    required this.onToggleFavorite,
+    required this.toggleBookmark,
   });
 
   @override
-  State<Customviewmovies> createState() => _CustomviewmoviesState();
-}
-
-class _CustomviewmoviesState extends State<Customviewmovies> {
-  @override
   Widget build(BuildContext context) {
     // Ensure the snapshot has data
-    if (!widget.snapshot.hasData) {
-      return Center(child: Text('No data available'));
+    if (!snapshot.hasData) {
+      return const Center(child: Text('No data available'));
     }
 
-    final List<Movie> movies = widget.snapshot.data!;
+    final List<Movie> movies = snapshot.data!;
+    // final movie0=movies[0];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 10.h),
         Text(
-          widget.title,
+          title,
           style: TextStyle(
             color: Colors.white,
             fontSize: 23.sp,
@@ -59,25 +56,21 @@ class _CustomviewmoviesState extends State<Customviewmovies> {
               final movie = movies[index];
               return Stack(
                 children: [
-                  Container(
-                    child: Image.network(
-                      '${Const.imagepath}${movie.posterPath}', // Ensure this is a full URL or handle base URL
-                      filterQuality: FilterQuality.high,
-                      fit: BoxFit.cover,
-                    ),
+                  Image.network(
+                    '${Const.imagepath}${movie.posterPath}', // Ensure this is a full URL or handle base URL
+                    filterQuality: FilterQuality.high,
+                    fit: BoxFit.cover,
                   ),
                   Positioned(
-                    top: 5.h, // Adjusted for better positioning
-                    right: 10.w, // Adjusted for better positioning
+                    top: -12.h,
+                    right: 88.w,
                     child: IconButton(
-                      onPressed: () {
-                        widget.onToggleFavorite(movie.id.toString());
-                      },
+                      onPressed: toggleBookmark,
                       icon: Icon(
-                        widget.movieId == movie.id.toString()
+                        isfav
                             ? Icons.bookmark_added_outlined
                             : Icons.bookmark_add_outlined,
-                        color: Colors.white,
+                        color: isfav ? Colors.yellow : Colors.white,
                         size: 30.sp,
                       ),
                     ),
