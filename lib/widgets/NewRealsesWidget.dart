@@ -49,14 +49,14 @@ class Newrealseswidget extends StatelessWidget {
               SizedBox(
                 height: 127.h,
                 width: 400.w,
-                child: GridView.builder(
+                child: ListView.separated(
+                  separatorBuilder: (context, index) {
+                    return SizedBox(
+                      width: 25.w,
+                    );
+                  },
                   scrollDirection: Axis.horizontal,
                   itemCount: data.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
-                    crossAxisSpacing: 1,
-                    mainAxisSpacing: 1,
-                  ),
                   itemBuilder: (context, index) {
                     final movie = data[index];
                     return Stack(

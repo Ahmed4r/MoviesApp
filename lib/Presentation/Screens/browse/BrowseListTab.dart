@@ -8,11 +8,7 @@ class BrowseListTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black87,
-      appBar: AppBar(
-        title: Text('Browse Category'),
-        backgroundColor: Colors.black87,
-        elevation: 0,
-      ),
+     
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GridView.builder(

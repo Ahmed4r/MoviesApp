@@ -31,6 +31,7 @@ class MovieDetailsPage extends StatelessWidget {
                           leading: IconButton(
                             icon: Icon(Icons.arrow_back, color: Colors.white),
                             onPressed: () {
+                              Navigator.pop(context);
                               // Navigator.pop(context);
                               // Handle back button press
                             },
