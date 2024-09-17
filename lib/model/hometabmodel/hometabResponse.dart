@@ -36,6 +36,7 @@ class HometabResponse {
 
 class Movie {
   Movie({
+    required this. isFavorite,
     this.adult,
     this.backdropPath,
     this.genreIds,
@@ -53,10 +54,11 @@ class Movie {
   });
 
   Movie.fromJson(Map<String, dynamic> json) {
+    isFavorite = json['isfavorite'];
     adult = json['adult'];
     backdropPath = json['backdrop_path'];
     genreIds = json['genre_ids'] != null ? json['genre_ids'].cast<int>() : [];
-    id = json['id'];
+    id = json['id']??0;
     originalLanguage = json['original_language'];
     originalTitle = json['original_title'];
     overview = json['overview'];
@@ -72,6 +74,7 @@ class Movie {
   String? backdropPath;
   List<int>? genreIds;
   int? id;
+  bool? isFavorite ;
   String? originalLanguage;
   String? originalTitle;
   String? overview;
@@ -82,6 +85,7 @@ class Movie {
   bool? video;
   double? voteAverage;
   int? voteCount;
+  
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
