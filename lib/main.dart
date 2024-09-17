@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          initialRoute: MovieDetailsPage.routeName,
+          initialRoute: SplashScreen.routename,
           routes: {
             HomeTab.routename: (context) => HomeTab(),
             MovieDetailsPage.routeName: (context) => MovieDetailsPage(),
