@@ -3,20 +3,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movies_app/Presentation/Screens/homeScreen/homeTab.dart';
 import 'package:movies_app/Shared/Text_Theme.dart';
 import 'package:movies_app/data/api/MovieDetailsApi/MDStates.dart';
 import 'package:movies_app/data/api/MovieDetailsApi/MovieDetailsCubit.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MovieDetailsPage extends StatelessWidget {
   static const String routeName = 'MovieDetailsPage';
   Moviedetailscubit moviecubit = Moviedetailscubit();
+
   @override
   Widget build(BuildContext context) {
+    final arguments =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final id = arguments['movieID'];
     return Container(
         height: double.infinity,
         width: double.infinity,
         child: BlocBuilder<Moviedetailscubit, MovieDetailsStates>(
-            bloc: moviecubit..getMovie("440"),
+            bloc: moviecubit..getMovie(id),
             builder: (context, state) {
               return state is MovieDetailsLoudingStates
                   ? Center(
@@ -62,7 +68,9 @@ class MovieDetailsPage extends StatelessWidget {
 
                                     child: IconButton(
                                       onPressed: () {
-                                        // Handle play button press
+                                        final Uri url = Uri.parse(
+                                            'https://www.youtube.com/watch?v=OzY2r2JXsDM');
+                                        _launchUrl(url);
                                       },
                                       icon: Icon(
                                         Icons.play_circle,
@@ -265,6 +273,16 @@ class MovieDetailsPage extends StatelessWidget {
                       ),
                     );
             }));
+  }
+
+  Future<void> _launchUrl(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.inAppWebView,
+      webViewConfiguration: const WebViewConfiguration(enableJavaScript: true),
+    )) {
+      throw Exception('Could not launch $url');
+    }
   }
 }
 

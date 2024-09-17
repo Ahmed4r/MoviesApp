@@ -32,7 +32,7 @@ class _HomeTabState extends State<HomeTab> {
     widget.viewmodel.showMovies();
   }
 
-  final Uri _url = Uri.parse('https://www.youtube.com/watch?v=hJiPAJKjUVg');
+  final Uri _url = Uri.parse('https://www.youtube.com/watch?v=OzY2r2JXsDM');
 
   void toggleBookmark() {
     setState(() {
@@ -69,7 +69,7 @@ class _HomeTabState extends State<HomeTab> {
                               width: 412.w,
                               height: 217.h,
                               child: Image.network(
-                                '${Const.imagepath}${movies[0].posterPath}',
+                                '${Const.imagepath}${movies[12].posterPath}',
                                 filterQuality: FilterQuality.high,
                                 fit: BoxFit.cover,
                               ),
@@ -104,7 +104,7 @@ class _HomeTabState extends State<HomeTab> {
                                   width: 129,
                                   height: 180,
                                   child: Image.network(
-                                    '${Const.imagepath}${movies.isNotEmpty ? movies[0].posterPath : ''}',
+                                    '${Const.imagepath}${movies.isNotEmpty ? movies[12].posterPath : ''}',
                                     filterQuality: FilterQuality.high,
                                     fit: BoxFit.cover,
                                   ),
@@ -139,7 +139,7 @@ class _HomeTabState extends State<HomeTab> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '${movies.isNotEmpty ? movies[0].title : ''}',
+                                '${movies.isNotEmpty ? movies[12].title : ''}',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 24.sp,
@@ -148,7 +148,7 @@ class _HomeTabState extends State<HomeTab> {
                               Row(
                                 children: [
                                   Text(
-                                    '${movies.isNotEmpty ? movies[0].originalLanguage : ''}',
+                                    '${movies.isNotEmpty ? movies[12].originalLanguage : ''}',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 14.sp,
@@ -158,7 +158,7 @@ class _HomeTabState extends State<HomeTab> {
                                     width: 5,
                                   ),
                                   Text(
-                                    '${movies.isNotEmpty ? movies[0].releaseDate : ''}',
+                                    '${movies.isNotEmpty ? movies[12].releaseDate : ''}',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 14.sp,
@@ -167,7 +167,10 @@ class _HomeTabState extends State<HomeTab> {
                                   IconButton(
                                     onPressed: () {
                                       Navigator.pushNamed(
-                                          context, MovieDetailsPage.routeName);
+                                          context, MovieDetailsPage.routeName,
+                                          arguments: {
+                                            'movieID': movies[12].id.toString()
+                                          });
                                     },
                                     icon: Icon(
                                       Icons.info,
