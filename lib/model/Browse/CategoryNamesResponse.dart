@@ -1,6 +1,7 @@
 class CategoryNames {
   CategoryNames({
-      this.genres,});
+    this.genres,
+  });
 
   CategoryNames.fromJson(dynamic json) {
     if (json['genres'] != null) {
@@ -19,17 +20,19 @@ class CategoryNames {
     }
     return map;
   }
-
 }
 
 class Genres {
   Genres({
-      this.id, 
-      this.name,});
+    this.id,
+    this.name,
+  });
 
-  Genres.fromJson(dynamic json) {
-    id = json['id'];
-    name = json['name'];
+  factory Genres.fromJson(Map<String, dynamic> json) {
+    return Genres(
+      id: json['id'],
+      name: json['name'] as String?,
+    );
   }
   int? id;
   String? name;
@@ -40,5 +43,4 @@ class Genres {
     map['name'] = name;
     return map;
   }
-
 }

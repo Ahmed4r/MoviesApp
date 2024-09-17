@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:movies_app/Presentation/Screens/homeScreen/homeTab.dart';
 import 'package:movies_app/data/api/const.dart';
 import 'package:movies_app/model/hometabmodel/NewRealeases.dart';
-import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
 
 class Newrealseswidget extends StatelessWidget {
   final bool isfav;
