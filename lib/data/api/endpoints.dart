@@ -5,7 +5,7 @@ class Endpoints {
   static const String top_side_section = '3/movie/popular';
 
   //Movie Details:
-  static const String Movie_Details = '3/movie/{movie_id}';
+  static const String Movie_Details = '/3/movie/';
   static const String more_like_this_section = '3/movie/{movie_id}/similar';
 
   // Search Screen

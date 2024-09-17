@@ -162,7 +162,7 @@ class _HomeTabState extends State<HomeTab> {
                           ],
                         ),
                         SizedBox(
-                          width: 110.w,
+                          width: 100.w,
                         ),
                         IconButton(
                             onPressed: () {
@@ -172,7 +172,7 @@ class _HomeTabState extends State<HomeTab> {
                             icon: Icon(
                               Icons.info,
                               color: Colors.white,
-                              size: 35,
+                              size: 30,
                             ))
                       ]),
                     ),
