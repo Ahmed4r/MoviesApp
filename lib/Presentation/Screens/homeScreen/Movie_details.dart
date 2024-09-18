@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/homeTab.dart';
+import 'package:movies_app/Presentation/SplashScreen/splashScreen.dart';
 import 'package:movies_app/Shared/Text_Theme.dart';
 import 'package:movies_app/data/api/MovieDetailsApi/MDStates.dart';
 import 'package:movies_app/data/api/MovieDetailsApi/MovieDetailsCubit.dart';
+import 'package:movies_app/widgets/bottomNav.dart';
+import 'package:readmore/readmore.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,11 +21,15 @@ class MovieDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final arguments =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final id = arguments['movieID'] as String;
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
 
-    final data = arguments['movieslist'] as List<dynamic>;
+    final id = arguments['movieID'];
+
+    final data = arguments['movieslist'];
+    if (moviecubit.movie.id == null || moviecubit.movie.id != id) {
+      moviecubit.getMovie(id);
+    }
 
     return Container(
         height: double.infinity,
@@ -42,6 +49,20 @@ class MovieDetailsPage extends StatelessWidget {
                       child: Scaffold(
                         backgroundColor: Colors.black,
                         appBar: AppBar(
+                          actions: [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.popUntil(context,
+                                      ModalRoute.withName(HomeTab.routename));
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => HomeScreen()),
+                                  );
+                                },
+                                icon: Icon(Icons.home),
+                                color: Colors.white)
+                          ],
                           backgroundColor: Colors.black,
                           leading: IconButton(
                             icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -78,7 +99,7 @@ class MovieDetailsPage extends StatelessWidget {
                                     child: IconButton(
                                       onPressed: () {
                                         final Uri url = Uri.parse(
-                                            'https://www.youtube.com/watch?v=OzY2r2JXsDM');
+                                            'https://www.imdb.com/title/${moviecubit.movie.imdbId}');
                                         _launchUrl(url);
                                       },
                                       icon: Icon(
@@ -151,7 +172,7 @@ class MovieDetailsPage extends StatelessWidget {
                                           children: [
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
+                                                  MainAxisAlignment.start,
                                               children: [
                                                 Container(
                                                   padding: EdgeInsets.symmetric(
@@ -165,51 +186,62 @@ class MovieDetailsPage extends StatelessWidget {
                                                             8),
                                                   ),
                                                   child: Text(
-                                                    'Action',
+                                                    moviecubit.movie.genres !=
+                                                                null &&
+                                                            moviecubit
+                                                                .movie
+                                                                .genres!
+                                                                .isNotEmpty
+                                                        ? moviecubit
+                                                                .movie
+                                                                .genres![0]
+                                                                .name ??
+                                                            ''
+                                                        : "No Genre Available",
                                                     style: TextStyle(
                                                       color: Colors.white,
-                                                      fontSize: 13.sp,
+                                                      fontSize: 15.sp,
                                                     ),
                                                   ),
                                                 ),
-                                                Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 8),
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.white24),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  child: Text(
-                                                    'Adventure',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 13.sp,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 8),
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.white24),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                  ),
-                                                  child: Text(
-                                                    'Family',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 13,
-                                                    ),
-                                                  ),
-                                                )
+                                                // Container(
+                                                //   padding: EdgeInsets.symmetric(
+                                                //       horizontal: 10,
+                                                //       vertical: 8),
+                                                //   decoration: BoxDecoration(
+                                                //     border: Border.all(
+                                                //         color: Colors.white24),
+                                                //     borderRadius:
+                                                //         BorderRadius.circular(
+                                                //             8.r),
+                                                //   ),
+                                                //   child: Text(
+                                                //     'Adventure',
+                                                //     style: TextStyle(
+                                                //       color: Colors.white,
+                                                //       fontSize: 13.sp,
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                                // Container(
+                                                //   padding: EdgeInsets.symmetric(
+                                                //       horizontal: 10,
+                                                //       vertical: 8),
+                                                //   decoration: BoxDecoration(
+                                                //     border: Border.all(
+                                                //         color: Colors.white24),
+                                                //     borderRadius:
+                                                //         BorderRadius.circular(
+                                                //             8),
+                                                //   ),
+                                                //   child: Text(
+                                                //     'Family',
+                                                //     style: TextStyle(
+                                                //       color: Colors.white,
+                                                //       fontSize: 13,
+                                                //     ),
+                                                //   ),
+                                                // )
                                               ],
                                             ),
                                             SizedBox(
@@ -217,15 +249,30 @@ class MovieDetailsPage extends StatelessWidget {
                                             ),
                                             Container(
                                               width: 150,
-                                              child: Text(
-                                                moviecubit.movie.overview ??
-                                                    " ",
-                                                // "Having spent most of her life exploring the jungle, nothing could prepare Dora for her most dangerous adventure yet — high school. ",
+                                              child: ReadMoreText(
                                                 style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.white70,
-                                                ),
+                                                    color: Colors.white),
+                                                moviecubit.movie.overview ?? '',
+                                                trimMode: TrimMode.Line,
+                                                trimLines: 4,
+                                                colorClickableText: Colors.pink,
+                                                trimCollapsedText: 'Show more',
+                                                trimExpandedText: 'Show less',
+                                                moreStyle: TextStyle(
+                                                    color: Colors.pink,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
+                                              // child: Text(
+                                              //   moviecubit.movie.overview ??
+                                              //       " ",
+                                              //   // "Having spent most of her life exploring the jungle, nothing could prepare Dora for her most dangerous adventure yet — high school. ",
+                                              //   style: TextStyle(
+                                              //     fontSize: 16,
+                                              //     color: Colors.white70,
+                                              //   ),
+                                              // ),
                                             ),
                                             SizedBox(
                                               height: 13.h,
@@ -237,7 +284,8 @@ class MovieDetailsPage extends StatelessWidget {
                                                 SizedBox(width: 4),
                                                 Text(
                                                   moviecubit.movie.voteAverage
-                                                          .toString() ??
+                                                          .toString()
+                                                          .substring(0, 3) ??
                                                       "",
                                                   style: TextStyle(
                                                       fontSize: 18,
@@ -276,7 +324,7 @@ class MovieDetailsPage extends StatelessWidget {
                                             arguments: {
                                               'movieID':
                                                   data[index].id.toString(),
-                                              "Data": data
+                                              "movieslist": data
                                             });
                                       },
                                       child: MovieCard(
@@ -321,11 +369,15 @@ class MovieCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        color: const Color.fromARGB(247, 31, 31, 31),
+      ),
       width: 130.w,
       height: 200.h,
-      color: const Color.fromARGB(136, 48, 48, 48),
       margin: EdgeInsets.only(right: 16.0),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Stack(
@@ -358,7 +410,7 @@ class MovieCard extends StatelessWidget {
               Icon(Icons.star, color: Colors.amber, size: 16),
               SizedBox(width: 4.w),
               Text(
-                rate,
+                rate.substring(0, 3),
                 style: TextStyle(
                   color: Colors.white,
                 ),

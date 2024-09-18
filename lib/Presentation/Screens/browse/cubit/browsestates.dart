@@ -1,4 +1,5 @@
 import 'package:movies_app/model/Browse/CategoryNameResponse.dart';
+import 'package:movies_app/model/Browse/movieDiscoverResponse.dart';
 
 abstract class Browsestates {}
 
@@ -15,3 +16,5 @@ class BrowseSuccessStates extends Browsestates {
 }
 
 class BrowseInitialStates extends Browsestates {}
+
+
