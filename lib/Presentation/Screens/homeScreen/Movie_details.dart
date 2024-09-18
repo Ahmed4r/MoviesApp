@@ -12,32 +12,26 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
 
-
 class MovieDetailsPage extends StatelessWidget {
   static const String routeName = 'MovieDetailsPage';
   Moviedetailscubit moviecubit = Moviedetailscubit();
 
   @override
   Widget build(BuildContext context) {
-
     final arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final id = arguments['movieID'];
+    final id = arguments['movieID'] as String;
 
-    final args = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
-    List<Movie> data = args['Data'];
-
+    final data = arguments['movieslist'] as List<dynamic>;
 
     return Container(
         height: double.infinity,
         width: double.infinity,
         child: BlocBuilder<Moviedetailscubit, MovieDetailsStates>(
 
+            // bloc: moviecubit..getMovie(id),
+
             bloc: moviecubit..getMovie(id),
-
-            bloc: moviecubit..getMovie(args['movieID']),
-
             builder: (context, state) {
               return state is MovieDetailsLoudingStates
                   ? Center(
@@ -49,7 +43,6 @@ class MovieDetailsPage extends StatelessWidget {
                         backgroundColor: Colors.black,
                         appBar: AppBar(
                           backgroundColor: Colors.black,
-
                           leading: IconButton(
                             icon: Icon(Icons.arrow_back, color: Colors.white),
                             onPressed: () {
@@ -58,7 +51,6 @@ class MovieDetailsPage extends StatelessWidget {
                               // Handle back button press
                             },
                           ),
-
                           title: Text(
                             moviecubit.movie.originalTitle ?? '',
                             style: TextThemee.bodyLargeWhite,
