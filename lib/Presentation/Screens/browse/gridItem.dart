@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class GridItem extends StatelessWidget {
+  final String genreName;
+
+  const GridItem({Key? key, required this.genreName}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,12 +22,10 @@ class GridItem extends StatelessWidget {
                   width: double.infinity,
                   height: double.infinity,
                 ),
-                onTap: () {}),
-            Positioned(
-              bottom: 10,
-              left: 10,
+                onTap: () {}), // Handle tap if needed
+            Center(
               child: Text(
-                'ACTION',
+                genreName,
                 style: TextStyle(
                     fontSize: 25,
                     color: Colors.white,
