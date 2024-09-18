@@ -4,6 +4,7 @@ class HometabResponse {
     this.results,
     this.totalPages,
     this.totalResults,
+
   });
 
   HometabResponse.fromJson(dynamic json) {
@@ -16,11 +17,14 @@ class HometabResponse {
     }
     totalPages = json['total_pages'];
     totalResults = json['total_results'];
+
+
   }
   int? page;
   List<Movie>? results;
   int? totalPages;
   int? totalResults;
+
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -36,7 +40,7 @@ class HometabResponse {
 
 class Movie {
   Movie({
-    required this. isFavorite,
+    required this.isFavorite,
     this.adult,
     this.backdropPath,
     this.genreIds,
@@ -58,7 +62,7 @@ class Movie {
     adult = json['adult'];
     backdropPath = json['backdrop_path'];
     genreIds = json['genre_ids'] != null ? json['genre_ids'].cast<int>() : [];
-    id = json['id']??0;
+    id = json['id'] ?? 0;
     originalLanguage = json['original_language'];
     originalTitle = json['original_title'];
     overview = json['overview'];
@@ -74,7 +78,7 @@ class Movie {
   String? backdropPath;
   List<int>? genreIds;
   int? id;
-  bool? isFavorite ;
+  bool? isFavorite;
   String? originalLanguage;
   String? originalTitle;
   String? overview;
@@ -85,7 +89,6 @@ class Movie {
   bool? video;
   double? voteAverage;
   int? voteCount;
-  
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
