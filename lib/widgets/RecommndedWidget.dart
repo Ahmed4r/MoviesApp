@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:movies_app/data/api/const.dart';
-import 'package:movies_app/model/hometabmodel/NewRealeases.dart';
 import 'package:movies_app/model/hometabmodel/RecommendedResponse.dart';
+import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
 
 class Recommndedwidget extends StatelessWidget {
   final bool isfav;
   final Future<List<RecommdedData>> snapshot;
   final String title;
-
   final VoidCallback toggleBookmark;
-
   Recommndedwidget({
     required this.snapshot,
     required this.isfav,
@@ -51,14 +49,12 @@ class Recommndedwidget extends StatelessWidget {
               SizedBox(
                 height: 127.h,
                 width: 400.w,
-                child: GridView.builder(
+                child: ListView.separated(
+                  separatorBuilder: (context, index) {
+                    return SizedBox(width: 25.w);
+                  },
                   scrollDirection: Axis.horizontal,
                   itemCount: data.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
-                    crossAxisSpacing: 1,
-                    mainAxisSpacing: 1,
-                  ),
                   itemBuilder: (context, index) {
                     final movie = data[index];
                     return Stack(

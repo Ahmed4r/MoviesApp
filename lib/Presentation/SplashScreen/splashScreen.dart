@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+
 import 'package:movies_app/widgets/bottomNav.dart';
 
 class SplashScreen extends StatelessWidget {
