@@ -7,7 +7,11 @@ import 'package:movies_app/Presentation/Screens/homeScreen/homeTab.dart';
 import 'package:movies_app/Shared/Text_Theme.dart';
 import 'package:movies_app/data/api/MovieDetailsApi/MDStates.dart';
 import 'package:movies_app/data/api/MovieDetailsApi/MovieDetailsCubit.dart';
+
 import 'package:url_launcher/url_launcher.dart';
+
+import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
+
 
 class MovieDetailsPage extends StatelessWidget {
   static const String routeName = 'MovieDetailsPage';
@@ -15,14 +19,25 @@ class MovieDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final id = arguments['movieID'];
+
+    final args = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+    List<Movie> data = args['Data'];
+
+
     return Container(
         height: double.infinity,
         width: double.infinity,
         child: BlocBuilder<Moviedetailscubit, MovieDetailsStates>(
+
             bloc: moviecubit..getMovie(id),
+
+            bloc: moviecubit..getMovie(args['movieID']),
+
             builder: (context, state) {
               return state is MovieDetailsLoudingStates
                   ? Center(
@@ -34,6 +49,7 @@ class MovieDetailsPage extends StatelessWidget {
                         backgroundColor: Colors.black,
                         appBar: AppBar(
                           backgroundColor: Colors.black,
+
                           leading: IconButton(
                             icon: Icon(Icons.arrow_back, color: Colors.white),
                             onPressed: () {
@@ -42,6 +58,7 @@ class MovieDetailsPage extends StatelessWidget {
                               // Handle back button press
                             },
                           ),
+
                           title: Text(
                             moviecubit.movie.originalTitle ?? '',
                             style: TextThemee.bodyLargeWhite,
@@ -254,19 +271,34 @@ class MovieDetailsPage extends StatelessWidget {
                                     color: Colors.white),
                               ),
                               SizedBox(height: 16),
-                              // Container(
-                              //   height: 200.h,
-                              //   child: ListView.builder(
-                              //     scrollDirection: Axis.horizontal,
-                              //     itemCount: moviecubit.movie.productionCompanies!.length,
-                              //     itemBuilder: (context, index) {
-                              //       return MovieCard(
-                              //           title: moviecubit.movie.productionCompanies?[index].name??"",
-                              //           imageUrl:
-                              //               "https://image.tmdb.org/t/p/original${moviecubit.movie.productionCompanies?[index].logoPath}"??"");
-                              //     },
-                              //   ),
-                              // ),
+                              Container(
+                                height: 200.h,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: data.length,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                            context, MovieDetailsPage.routeName,
+                                            arguments: {
+                                              'movieID':
+                                                  data[index].id.toString(),
+                                              "Data": data
+                                            });
+                                      },
+                                      child: MovieCard(
+                                          rate: data[index]
+                                              .voteAverage
+                                              .toString(),
+                                          title: data[index].title ?? "",
+                                          imageUrl:
+                                              "https://image.tmdb.org/t/p/original${data[index].posterPath}" ??
+                                                  ""),
+                                    );
+                                  },
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -289,26 +321,29 @@ class MovieDetailsPage extends StatelessWidget {
 class MovieCard extends StatelessWidget {
   final String title;
   final String imageUrl;
+  final String rate;
 
-  const MovieCard({required this.title, required this.imageUrl});
+  const MovieCard(
+      {required this.title, required this.imageUrl, required this.rate});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color.fromARGB(255, 71, 71, 71),
-      width: 120,
+      width: 130.w,
+      height: 200.h,
+      color: const Color.fromARGB(136, 48, 48, 48),
       margin: EdgeInsets.only(right: 16.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Stack(
             children: [
               Container(
                 child: Image.network(
                   imageUrl,
-                  width: 100,
+                  width: 100.w,
                   fit: BoxFit.cover,
-                  height: 100.h,
+                  height: 130.h,
                 ),
               ),
               Positioned(
@@ -331,7 +366,7 @@ class MovieCard extends StatelessWidget {
               Icon(Icons.star, color: Colors.amber, size: 16),
               SizedBox(width: 4.w),
               Text(
-                '7.7',
+                rate,
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -341,7 +376,7 @@ class MovieCard extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 12.sp,
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),

@@ -6,6 +6,8 @@ import 'package:movies_app/data/api/MovieDetailsApi/movie_details_response.dart'
 class Moviedetailscubit extends Cubit<MovieDetailsStates> {
   Moviedetailscubit() : super(MovieDetailsInichialStates());
   MovieDetailsResponse movie = MovieDetailsResponse();
+
+
   void getMovie(String movieID) async {
     try {
       emit(MovieDetailsLoudingStates());
