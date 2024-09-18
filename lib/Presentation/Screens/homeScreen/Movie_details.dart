@@ -78,7 +78,7 @@ class MovieDetailsPage extends StatelessWidget {
                                     child: IconButton(
                                       onPressed: () {
                                         final Uri url = Uri.parse(
-                                            'https://www.youtube.com/watch?v=OzY2r2JXsDM');
+                                            'https://www.imdb.com/title/${moviecubit.movie.imdbId}');
                                         _launchUrl(url);
                                       },
                                       icon: Icon(
@@ -151,7 +151,7 @@ class MovieDetailsPage extends StatelessWidget {
                                           children: [
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
+                                                  MainAxisAlignment.start,
                                               children: [
                                                 Container(
                                                   padding: EdgeInsets.symmetric(
@@ -165,51 +165,51 @@ class MovieDetailsPage extends StatelessWidget {
                                                             8),
                                                   ),
                                                   child: Text(
-                                                    'Action',
+                                                    moviecubit.movie.genres![0].name??'',
                                                     style: TextStyle(
                                                       color: Colors.white,
-                                                      fontSize: 13.sp,
+                                                      fontSize: 15.sp,
                                                     ),
                                                   ),
                                                 ),
-                                                Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 8),
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.white24),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  child: Text(
-                                                    'Adventure',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 13.sp,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 8),
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.white24),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                  ),
-                                                  child: Text(
-                                                    'Family',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 13,
-                                                    ),
-                                                  ),
-                                                )
+                                                // Container(
+                                                //   padding: EdgeInsets.symmetric(
+                                                //       horizontal: 10,
+                                                //       vertical: 8),
+                                                //   decoration: BoxDecoration(
+                                                //     border: Border.all(
+                                                //         color: Colors.white24),
+                                                //     borderRadius:
+                                                //         BorderRadius.circular(
+                                                //             8.r),
+                                                //   ),
+                                                //   child: Text(
+                                                //     'Adventure',
+                                                //     style: TextStyle(
+                                                //       color: Colors.white,
+                                                //       fontSize: 13.sp,
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                                // Container(
+                                                //   padding: EdgeInsets.symmetric(
+                                                //       horizontal: 10,
+                                                //       vertical: 8),
+                                                //   decoration: BoxDecoration(
+                                                //     border: Border.all(
+                                                //         color: Colors.white24),
+                                                //     borderRadius:
+                                                //         BorderRadius.circular(
+                                                //             8),
+                                                //   ),
+                                                //   child: Text(
+                                                //     'Family',
+                                                //     style: TextStyle(
+                                                //       color: Colors.white,
+                                                //       fontSize: 13,
+                                                //     ),
+                                                //   ),
+                                                // )
                                               ],
                                             ),
                                             SizedBox(
