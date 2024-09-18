@@ -9,14 +9,6 @@ class MovieList extends StatefulWidget {
 }
 
 class _MovieListState extends State<MovieList> {
-  bool isFav = false;
-
-  void toggleBookmark() {
-    setState(() {
-      isFav = !isFav;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,20 +51,6 @@ class _MovieListState extends State<MovieList> {
                             image: NetworkImage(
                                 'https://siskiyou.sou.edu/wp-content/uploads/2022/03/intro-1644532027.webp'), // Replace with actual poster URL
                             fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: -5.h,
-                        left: -10.w,
-                        child: IconButton(
-                          onPressed: toggleBookmark,
-                          icon: Icon(
-                            isFav
-                                ? Icons.bookmark_added_outlined
-                                : Icons.bookmark_add_outlined,
-                            color: isFav ? Colors.yellow : Colors.white,
-                            size: 30.sp,
                           ),
                         ),
                       ),

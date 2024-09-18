@@ -22,7 +22,7 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  Map<int, bool> favoriteMovies = {};
+  static  Map<int, bool> favoriteMovies = {};
   bool isfav = false;
   late Future<HometabResponse> hometabResponse;
 
@@ -52,6 +52,7 @@ class _HomeTabState extends State<HomeTab> {
           return Center(child: Text('Error: ${state.errorMessage}'));
         } else if (state is HometabSuccessStates) {
           final movies = state.response.results ?? [];
+          final primeMovie = movies[0];
           return Scaffold(
             backgroundColor: Colors.black,
             body: SingleChildScrollView(
@@ -70,7 +71,7 @@ class _HomeTabState extends State<HomeTab> {
                               width: 412.w,
                               height: 217.h,
                               child: Image.network(
-                                '${Const.imagepath}${movies[11].posterPath}',
+                                '${Const.imagepath}${primeMovie.posterPath}',
                                 filterQuality: FilterQuality.high,
                                 fit: BoxFit.cover,
                               ),
@@ -105,7 +106,7 @@ class _HomeTabState extends State<HomeTab> {
                                   width: 129,
                                   height: 180,
                                   child: Image.network(
-                                    '${Const.imagepath}${movies.isNotEmpty ? movies[11].posterPath : ''}',
+                                    '${Const.imagepath}${movies.isNotEmpty ? primeMovie.posterPath : ''}',
                                     filterQuality: FilterQuality.high,
                                     fit: BoxFit.cover,
                                   ),
@@ -115,7 +116,9 @@ class _HomeTabState extends State<HomeTab> {
                                   left: -11.w,
                                   child: IconButton(
                                     onPressed: () {
-                                      toggleBookmark(movies[11].id ?? 1);
+                                      toggleBookmark(primeMovie.id ?? 1);
+                                      print(
+                                          'sdsddddddddddddddddddddddddddddddddddd');
                                     },
                                     icon: Icon(
                                       isfav
@@ -140,7 +143,7 @@ class _HomeTabState extends State<HomeTab> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '${movies.isNotEmpty ? movies[11].title : ''}',
+                                '${movies.isNotEmpty ? primeMovie.title : ''}',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 24.sp,
@@ -149,7 +152,7 @@ class _HomeTabState extends State<HomeTab> {
                               Row(
                                 children: [
                                   Text(
-                                    '${movies.isNotEmpty ? movies[11].originalLanguage : ''}',
+                                    '${movies.isNotEmpty ? primeMovie.originalLanguage : ''}',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 14.sp,
@@ -159,7 +162,7 @@ class _HomeTabState extends State<HomeTab> {
                                     width: 5,
                                   ),
                                   Text(
-                                    '${movies.isNotEmpty ? movies[11].releaseDate : ''}',
+                                    '${movies.isNotEmpty ? primeMovie.releaseDate : ''}',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 14.sp,
@@ -170,7 +173,7 @@ class _HomeTabState extends State<HomeTab> {
                                       Navigator.pushNamed(
                                           context, MovieDetailsPage.routeName,
                                           arguments: {
-                                            'movieID': movies[11].id.toString(),
+                                            'movieID': primeMovie.id.toString(),
                                             'movieslist': movies
                                           });
                                     },

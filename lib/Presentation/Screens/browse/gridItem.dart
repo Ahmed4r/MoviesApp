@@ -15,7 +15,10 @@ class GridItem extends StatelessWidget {
         color: Colors.grey.shade900,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Center(
+      child: InkWell(
+        onTap: () {
+          Navigator.pushNamed(context, MovieList.routename);
+        },
         child: Stack(
           children: [
             Image.network(
@@ -25,17 +28,12 @@ class GridItem extends StatelessWidget {
               height: double.infinity,
             ),
             Center(
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(context).pushNamed(MovieList.routename);
-                },
-                child: Text(
-                  genreName,
-                  style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                ),
+              child: Text(
+                genreName,
+                style: TextStyle(
+                    fontSize: 25,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ],
