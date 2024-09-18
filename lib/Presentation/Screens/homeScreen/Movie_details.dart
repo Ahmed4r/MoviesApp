@@ -27,6 +27,9 @@ class MovieDetailsPage extends StatelessWidget {
     final id = arguments['movieID'];
 
     final data = arguments['movieslist'];
+    if (moviecubit.movie.id == null || moviecubit.movie.id != id) {
+      moviecubit.getMovie(id);
+    }
 
     return Container(
         height: double.infinity,
@@ -183,9 +186,18 @@ class MovieDetailsPage extends StatelessWidget {
                                                             8),
                                                   ),
                                                   child: Text(
-                                                    moviecubit.movie.genres![0]
-                                                            .name ??
-                                                        '',
+                                                    moviecubit.movie.genres !=
+                                                                null &&
+                                                            moviecubit
+                                                                .movie
+                                                                .genres!
+                                                                .isNotEmpty
+                                                        ? moviecubit
+                                                                .movie
+                                                                .genres![0]
+                                                                .name ??
+                                                            ''
+                                                        : "No Genre Available",
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 15.sp,

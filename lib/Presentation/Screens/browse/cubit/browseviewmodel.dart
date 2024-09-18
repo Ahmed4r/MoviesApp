@@ -21,4 +21,5 @@ class Browseviewmodel extends Cubit<Browsestates> {
           BrowseErrorStates(errorMessage: e.toString())); 
     }
   }
+  
 }

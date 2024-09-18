@@ -22,6 +22,7 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  Map<int, bool> favoriteMovies = {};
   bool isfav = false;
   late Future<HometabResponse> hometabResponse;
 
@@ -34,9 +35,9 @@ class _HomeTabState extends State<HomeTab> {
 
   final Uri _url = Uri.parse('https://www.youtube.com/watch?v=OzY2r2JXsDM');
 
-  void toggleBookmark() {
+  void toggleBookmark(int movieID) {
     setState(() {
-      isfav = !isfav;
+      favoriteMovies[movieID] = !(favoriteMovies[movieID] ?? false);
     });
   }
 
@@ -69,7 +70,7 @@ class _HomeTabState extends State<HomeTab> {
                               width: 412.w,
                               height: 217.h,
                               child: Image.network(
-                                '${Const.imagepath}${movies[12].posterPath}',
+                                '${Const.imagepath}${movies[11].posterPath}',
                                 filterQuality: FilterQuality.high,
                                 fit: BoxFit.cover,
                               ),
@@ -104,7 +105,7 @@ class _HomeTabState extends State<HomeTab> {
                                   width: 129,
                                   height: 180,
                                   child: Image.network(
-                                    '${Const.imagepath}${movies.isNotEmpty ? movies[12].posterPath : ''}',
+                                    '${Const.imagepath}${movies.isNotEmpty ? movies[11].posterPath : ''}',
                                     filterQuality: FilterQuality.high,
                                     fit: BoxFit.cover,
                                   ),
@@ -114,7 +115,7 @@ class _HomeTabState extends State<HomeTab> {
                                   left: -11.w,
                                   child: IconButton(
                                     onPressed: () {
-                                      toggleBookmark();
+                                      toggleBookmark(movies[11].id ?? 1);
                                     },
                                     icon: Icon(
                                       isfav
@@ -139,7 +140,7 @@ class _HomeTabState extends State<HomeTab> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '${movies.isNotEmpty ? movies[12].title : ''}',
+                                '${movies.isNotEmpty ? movies[11].title : ''}',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 24.sp,
@@ -148,7 +149,7 @@ class _HomeTabState extends State<HomeTab> {
                               Row(
                                 children: [
                                   Text(
-                                    '${movies.isNotEmpty ? movies[12].originalLanguage : ''}',
+                                    '${movies.isNotEmpty ? movies[11].originalLanguage : ''}',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 14.sp,
@@ -158,7 +159,7 @@ class _HomeTabState extends State<HomeTab> {
                                     width: 5,
                                   ),
                                   Text(
-                                    '${movies.isNotEmpty ? movies[12].releaseDate : ''}',
+                                    '${movies.isNotEmpty ? movies[11].releaseDate : ''}',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 14.sp,
@@ -169,9 +170,8 @@ class _HomeTabState extends State<HomeTab> {
                                       Navigator.pushNamed(
                                           context, MovieDetailsPage.routeName,
                                           arguments: {
-                                          
-                                            'movieID': movies[12].id.toString(),
-                                            'movieslist':movies
+                                            'movieID': movies[11].id.toString(),
+                                            'movieslist': movies
                                           });
                                     },
                                     icon: Icon(
@@ -195,8 +195,8 @@ class _HomeTabState extends State<HomeTab> {
                     width: 455.w,
                     child: Newrealseswidget(
                       snapshot: ApiManager.getNewRealeases(),
-                      isfav: isfav,
                       toggleBookmark: toggleBookmark,
+                      favoriteMovies: favoriteMovies,
                       title: 'New Releases',
                     ),
                   ),
@@ -206,10 +206,12 @@ class _HomeTabState extends State<HomeTab> {
                     height: 187.h,
                     width: 455.w,
                     child: Recommndedwidget(
-                      isfav: isfav,
+                      favoriteMovies: favoriteMovies,
+                      toggleBookmark: toggleBookmark,
+                      // isfav: isfav,
                       snapshot: ApiManager.getRecommended(),
                       title: 'Recommended',
-                      toggleBookmark: toggleBookmark,
+                      // toggleBookmark: toggleBookmark,
                     ),
                   ),
                 ],
