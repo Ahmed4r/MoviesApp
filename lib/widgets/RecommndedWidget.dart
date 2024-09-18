@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movies_app/Presentation/Screens/homeScreen/Movie_details.dart';
 
 import 'package:movies_app/data/api/const.dart';
 import 'package:movies_app/model/hometabmodel/RecommendedResponse.dart';
@@ -59,10 +60,21 @@ class Recommndedwidget extends StatelessWidget {
                     final movie = data[index];
                     return Stack(
                       children: [
-                        Image.network(
-                          '${Const.imagepath}${movie.posterPath}', // Ensure this is a full URL or handle base URL
-                          filterQuality: FilterQuality.high,
-                          fit: BoxFit.cover,
+                        InkWell(
+                          onTap: (){
+                            Navigator.pushNamed(
+                                          context, MovieDetailsPage.routeName,
+                                          arguments: {
+                                          
+                                            'movieID': data[index].id.toString(),
+                                            'movieslist':data
+                                          });
+                          },
+                          child: Image.network(
+                            '${Const.imagepath}${movie.posterPath}', // Ensure this is a full URL or handle base URL
+                            filterQuality: FilterQuality.high,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                         Positioned(
                           top: -12.h,
