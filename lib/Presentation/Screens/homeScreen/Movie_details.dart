@@ -18,11 +18,11 @@ class MovieDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final arguments =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final id = arguments['movieID'] as String;
+    final arguments = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{}) as Map;
 
-    final data = arguments['movieslist'] as List<dynamic>;
+    final id = arguments['movieID'];
+
+    final data = arguments['movieslist'] ;
 
     return Container(
         height: double.infinity,
@@ -276,7 +276,7 @@ class MovieDetailsPage extends StatelessWidget {
                                             arguments: {
                                               'movieID':
                                                   data[index].id.toString(),
-                                              "Data": data
+                                              "movieslist": data
                                             });
                                       },
                                       child: MovieCard(
