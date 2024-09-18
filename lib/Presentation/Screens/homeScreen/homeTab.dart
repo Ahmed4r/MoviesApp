@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/Movie_details.dart';
-
 import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabStates.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabViewmodel.dart';
-
 import 'package:movies_app/data/api/Api_manger.dart';
-import 'package:movies_app/data/api/MovieDetailsApi/MovieDetailsCubit.dart';
 import 'package:movies_app/data/api/const.dart';
 import 'package:movies_app/model/hometabmodel/NewRealeases.dart';
 import 'package:movies_app/model/hometabmodel/RecommendedResponse.dart';
@@ -25,10 +22,6 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-
-  Moviedetailscubit movieCubit = Moviedetailscubit();
-  final Map<int?, bool> _favoriteMovies = {};
-
   bool isfav = false;
   late Future<HometabResponse> hometabResponse;
 
@@ -49,7 +42,6 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<Hometabviewmodel, HomeTabstates>(
       bloc: widget.viewmodel..showMovies(),
       builder: (BuildContext context, HomeTabstates state) {
@@ -71,43 +63,6 @@ class _HomeTabState extends State<HomeTab> {
                         width: 412.w,
                         height: 300.h,
                         color: Colors.black,
-
-    return FutureBuilder<List<Movie>>(
-      future: popularMovies,
-      builder: (context, snap) {
-        if (snap.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snap.hasError) {
-          return Center(child: Text('Error: ${snap.error.toString()}'));
-        } else if (!snap.hasData || snap.data!.isEmpty) {
-          return const Center(child: Text('No data available'));
-        }
-
-        final data = snap.data!;
-        final moive0 = data[14];
-
-        return Scaffold(
-          backgroundColor: Colors.black,
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: 50.h),
-                Stack(
-                  children: [
-                    Container(
-                      width: 412.w,
-                      height: 300.h,
-                      color: Colors.black,
-                    ),
-                    //image big
-                    Container(
-                      width: 412.w,
-                      height: 217.h,
-                      child: Image.network(
-                        '${Const.imagepath}${moive0.posterPath}', // Ensure this is a full URL or handle base URL
-                        filterQuality: FilterQuality.high,
-                        fit: BoxFit.cover,
-
                       ),
                       movies.isNotEmpty
                           ? Container(
@@ -214,7 +169,9 @@ class _HomeTabState extends State<HomeTab> {
                                       Navigator.pushNamed(
                                           context, MovieDetailsPage.routeName,
                                           arguments: {
-                                            'movieID': movies[12].id.toString()
+                                          
+                                            'movieID': movies[12].id.toString(),
+                                            'movieslist':movies
                                           });
                                     },
                                     icon: Icon(
@@ -242,58 +199,6 @@ class _HomeTabState extends State<HomeTab> {
                       toggleBookmark: toggleBookmark,
                       title: 'New Releases',
                     ),
-
-                    Positioned(
-                      left: 160.w,
-                      top: 225.h,
-                      child: Row(children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${moive0.title}',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24.sp,
-                              ),
-                            ),
-                            Text(
-                              '${moive0.releaseDate}  ${moive0.originalLanguage}', // Replace with actual movie details
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        IconButton(
-                            onPressed: () async{
-
-                              Navigator.pushNamed(
-                                  context, MovieDetailsPage.routeName,arguments:{'movieID': moive0.id.toString(),"Data":data} );
-                            },
-                            icon: Icon(
-                              Icons.info,
-                              color: Colors.white,
-                              size: 30,
-                            ))
-                      ]),
-                    ),
-                  ],
-                ),
-                Container(
-                  color: const Color(0xff282A28),
-                  height: 187.h,
-                  width: 455.w,
-                  child: Newrealseswidget(
-                    snapshot: ApiManager.getNewRealeases(),
-                    isfav: isfav,
-                    toggleBookmark: toggleBookmark,
-                    title: 'New Releases',
-
                   ),
                   SizedBox(height: 30.h),
                   Container(
