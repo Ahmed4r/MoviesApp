@@ -21,28 +21,28 @@ class GridItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Center(
-        child: Stack(
-          children: [
-            Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
-            ),
-            Center(
-              child: InkWell(
-                onTap: () {
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MovieList(
-                        genreId: genreId,
-                        genreName: genreName,
+        child: InkWell(
+          onTap: () {
+          
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MovieList(
+                          genreId: genreId,
+                          genreName: genreName,
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+          child: Stack(
+            children: [
+              Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              ),
+              Center(
                 child: Text(
                   genreName,
                   style: TextStyle(
@@ -51,8 +51,8 @@ class GridItem extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
