@@ -23,17 +23,16 @@ class GridItem extends StatelessWidget {
       child: Center(
         child: InkWell(
           onTap: () {
-          
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MovieList(
-                          genreId: genreId,
-                          genreName: genreName,
-                        ),
-                      ),
-                    );
-                  },
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MovieList(
+                  genreId: genreId,
+                  genreName: genreName,
+                ),
+              ),
+            );
+          },
           child: Stack(
             children: [
               Image.network(
