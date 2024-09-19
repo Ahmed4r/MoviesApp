@@ -19,6 +19,12 @@ class MovieList extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+          ),
           title: Text(genreName, style: TextStyle(color: Colors.white)),
           backgroundColor: Colors.black,
           elevation: 0,
@@ -36,7 +42,8 @@ class MovieList extends StatelessWidget {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 20,
-                    childAspectRatio: 0.65, // Aspect ratio to fit items correctly
+                    childAspectRatio:
+                        0.65, // Aspect ratio to fit items correctly
                   ),
                   itemCount: movies.length,
                   itemBuilder: (context, index) {
@@ -46,13 +53,11 @@ class MovieList extends StatelessWidget {
                       posterPath: movie.posterPath,
                       rate: movie.voteAverage.toString(),
                       onTap: () {
-
-                         Navigator.pushNamed(
-                                          context, MovieDetailsPage.routeName,
-                                          arguments: {
-                                            'movieID': movie.id.toString(),
-                                            'movieslist': movies
-                                          });
+                        Navigator.pushNamed(context, MovieDetailsPage.routeName,
+                            arguments: {
+                              'movieID': movie.id.toString(),
+                              'movieslist': movies
+                            });
                         // Navigate to movie details screen
                         // Navigator.of(context).pushNamed(
                         //   MovieDetailsPage.routeName,
@@ -64,9 +69,13 @@ class MovieList extends StatelessWidget {
                 ),
               );
             } else if (state is MovieListErrorState) {
-              return Center(child: Text('Error: ${state.errorMessage}', style: TextStyle(color: Colors.white)));
+              return Center(
+                  child: Text('Error: ${state.errorMessage}',
+                      style: TextStyle(color: Colors.white)));
             } else {
-              return Center(child: Text('No data available', style: TextStyle(color: Colors.white)));
+              return Center(
+                  child: Text('No data available',
+                      style: TextStyle(color: Colors.white)));
             }
           },
         ),

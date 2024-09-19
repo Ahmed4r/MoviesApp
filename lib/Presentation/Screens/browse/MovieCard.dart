@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 class Moviecard extends StatelessWidget {
-
   final String title;
   final String? posterPath;
   final String rate;
   final VoidCallback onTap;
 
-  Moviecard({required this.title, required this.posterPath, required this.rate, required this.onTap});
+  Moviecard(
+      {required this.title,
+      required this.posterPath,
+      required this.rate,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-
     const String baseUrl = "https://image.tmdb.org/t/p/w500";
 
     final String imageUrl = (posterPath != null && posterPath!.startsWith('/'))
@@ -41,9 +43,20 @@ class Moviecard extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.all(4),
                   color: Colors.black54,
-                  child: Text(
-                    rate,
-                    style: TextStyle(color: Colors.white),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(4),
+                        child: Text(
+                          rate.substring(0, 3),
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
