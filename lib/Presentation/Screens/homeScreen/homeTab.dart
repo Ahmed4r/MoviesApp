@@ -22,7 +22,7 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  static  Map<int, bool> favoriteMovies = {};
+  static Map<int, bool> favoriteMovies = {};
   bool isfav = false;
   late Future<HometabResponse> hometabResponse;
 

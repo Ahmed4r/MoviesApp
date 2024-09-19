@@ -43,7 +43,7 @@ class _MovieListState extends State<MovieList> {
                   Stack(
                     children: [
                       Container(
-                        width: 150.w, // Increased width
+                        width: double.infinity, // Increased width
                         height: 240.h, // Increased height
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -61,7 +61,7 @@ class _MovieListState extends State<MovieList> {
                     'Movie Title $index',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16.sp,
+                      fontSize: 17.sp,
                     ),
                   ),
                   Text(
