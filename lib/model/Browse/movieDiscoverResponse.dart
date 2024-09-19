@@ -1,19 +1,19 @@
 class MovieDiscoverResponse {
-  MovieDiscoverResponse(
-      {this.page,
-      this.results,
-      this.totalPages,
+  MovieDiscoverResponse({
+      this.page, 
+      this.results, 
+      this.totalPages, 
       this.totalResults,
       this.status_code,
       this.status_message,
-      this.success});
+    this.success});
 
   MovieDiscoverResponse.fromJson(dynamic json) {
     page = json['page'];
     if (json['results'] != null) {
       results = [];
       json['results'].forEach((v) {
-        results?.add(Data.fromJson(v));
+        results?.add(Results.fromJson(v));
       });
     }
     totalPages = json['total_pages'];
@@ -23,7 +23,7 @@ class MovieDiscoverResponse {
     status_message = json['status_message'];
   }
   int? page;
-  List<Data>? results;
+  List<Results>? results;
   int? totalPages;
   int? totalResults;
   bool? success;
@@ -40,27 +40,28 @@ class MovieDiscoverResponse {
     map['total_results'] = totalResults;
     return map;
   }
+
 }
 
-class Data {
-  Data({
-    this.adult,
-    this.backdropPath,
-    this.genreIds,
-    this.id,
-    this.originalLanguage,
-    this.originalTitle,
-    this.overview,
-    this.popularity,
-    this.posterPath,
-    this.releaseDate,
-    this.title,
-    this.video,
-    this.voteAverage,
-    this.voteCount,
-  });
+class Results {
+  Results({
+      this.adult, 
+      this.backdropPath, 
+      this.genreIds, 
+      this.id, 
+      this.originalLanguage, 
+      this.originalTitle, 
+      this.overview, 
+      this.popularity, 
+      this.posterPath, 
+      this.releaseDate, 
+      this.title, 
+      this.video, 
+      this.voteAverage, 
+      this.voteCount,
+      });
 
-  Data.fromJson(dynamic json) {
+  Results.fromJson(dynamic json) {
     adult = json['adult'];
     backdropPath = json['backdrop_path'];
     genreIds = json['genre_ids'] != null ? json['genre_ids'].cast<int>() : [];
@@ -75,6 +76,7 @@ class Data {
     video = json['video'];
     voteAverage = json['vote_average'];
     voteCount = json['vote_count'];
+
   }
   bool? adult;
   String? backdropPath;
@@ -90,6 +92,7 @@ class Data {
   bool? video;
   double? voteAverage;
   int? voteCount;
+
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -109,4 +112,5 @@ class Data {
     map['vote_count'] = voteCount;
     return map;
   }
+
 }
