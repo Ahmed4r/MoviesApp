@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/homeTab.dart';
-import 'package:movies_app/Presentation/SplashScreen/splashScreen.dart';
 import 'package:movies_app/Shared/Text_Theme.dart';
 import 'package:movies_app/data/api/MovieDetailsApi/MDStates.dart';
 import 'package:movies_app/data/api/MovieDetailsApi/MovieDetailsCubit.dart';
@@ -13,7 +12,6 @@ import 'package:readmore/readmore.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
 
 class MovieDetailsPage extends StatelessWidget {
   static const String routeName = 'MovieDetailsPage';

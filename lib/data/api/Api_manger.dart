@@ -5,7 +5,6 @@ import 'package:movies_app/data/api/MovieDetailsApi/movie_details_response.dart'
 import 'package:movies_app/data/api/endpoints.dart';
 import 'package:movies_app/model/Browse/CategoryNameResponse.dart';
 
-import 'package:movies_app/model/Browse/movieDiscoverResponse.dart';
 
 import 'package:movies_app/model/hometabmodel/NewRealeases.dart';
 import 'package:movies_app/model/hometabmodel/RecommendedResponse.dart';

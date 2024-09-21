@@ -1,5 +1,4 @@
 import 'package:movies_app/model/Browse/CategoryNameResponse.dart';
-import 'package:movies_app/model/Browse/movieDiscoverResponse.dart';
 
 abstract class Browsestates {}
 
