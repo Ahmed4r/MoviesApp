@@ -29,6 +29,7 @@ class MovieList extends StatelessWidget {
           backgroundColor: Colors.black,
           elevation: 0,
         ),
+
         body: BlocBuilder<BrowseViewModel, BrowseStates>(
           builder: (context, state) {
             if (state is MovieListLoadingState) {
@@ -44,6 +45,49 @@ class MovieList extends StatelessWidget {
                     mainAxisSpacing: 20,
                     childAspectRatio:
                         0.65, // Aspect ratio to fit items correctly
+
+      ),
+      body: Expanded(
+        child: ListView.builder(
+          padding: EdgeInsets.symmetric(vertical: 10.h),
+          itemCount: 15,
+          scrollDirection: Axis.vertical,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        width: double.infinity, // Increased width
+                        height: 240.h, // Increased height
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                                'https://siskiyou.sou.edu/wp-content/uploads/2022/03/intro-1644532027.webp'), // Replace with actual poster URL
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12.h),
+                  Text(
+                    'Movie Title $index',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17.sp,
+                    ),
+                  ),
+                  Text(
+                    'Release Date',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14.sp,
+                    ),
+
                   ),
                   itemCount: movies.length,
                   itemBuilder: (context, index) {

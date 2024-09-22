@@ -23,6 +23,7 @@ class MovieDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
+    
 
     final id = arguments['movieID'];
 

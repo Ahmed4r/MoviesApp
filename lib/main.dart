@@ -10,10 +10,9 @@ import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabViewmode
 import 'package:movies_app/Presentation/Screens/homeScreen/homeTab.dart';
 import 'package:movies_app/Presentation/Screens/watchListScreen/WatchListTab.dart';
 import 'package:movies_app/Presentation/SplashScreen/splashScreen.dart';
-import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
-import 'package:movies_app/widgets/bottomNav.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
   runApp(const MyApp());
 }
@@ -78,11 +77,13 @@ class MyApp extends StatelessWidget {
             WatchListTab.routename: (context) => WatchListTab(),
 
 
+
+
+            MovieList.routename: (context) => MovieList(),
+
           },
         );
       },
     );
   }
 }
-
-

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/Movie_details.dart';
+import 'package:movies_app/Presentation/Screens/watchListScreen/WatchListTab.dart';
 import 'package:movies_app/data/api/const.dart';
 import 'package:movies_app/model/hometabmodel/NewRealeases.dart';
 
@@ -82,8 +83,14 @@ class Newrealseswidget extends StatelessWidget {
                         right: 44.w,
                         child: IconButton(
                           onPressed: () {
+
                             toggleBookmark(
                                 movie.id ?? 1); // Toggle favorite status
+
+                            toggleBookmark(movie.id ?? 1);
+
+                            // Toggle favorite status
+y
                           },
                           icon: Icon(
                             isfav
