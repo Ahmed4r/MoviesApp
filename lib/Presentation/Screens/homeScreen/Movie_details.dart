@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +14,6 @@ import 'package:readmore/readmore.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-
 class MovieDetailsPage extends StatelessWidget {
   static const String routeName = 'MovieDetailsPage';
   Moviedetailscubit moviecubit = Moviedetailscubit();
@@ -21,7 +22,6 @@ class MovieDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
-    
 
     final id = arguments['movieID'];
 
@@ -67,6 +67,7 @@ class MovieDetailsPage extends StatelessWidget {
                             icon: Icon(Icons.arrow_back, color: Colors.white),
                             onPressed: () {
                               Navigator.pop(context);
+
                               // Navigator.pop(context);
                               // Handle back button press
                             },
@@ -142,9 +143,11 @@ class MovieDetailsPage extends StatelessWidget {
                                     children: [
                                       Container(
                                         child: Image.network(
-                                          "https://image.tmdb.org/t/p/original${moviecubit.movie.posterPath}",
+                                          "https://image.tmdb.org/t/p/original${moviecubit.movie.backdropPath}",
                                           height: 200.h,
                                           width: 150.w,
+                                          fit: BoxFit.cover,
+                                          scale: 3,
                                         ),
                                       ),
                                       Positioned(
@@ -203,44 +206,6 @@ class MovieDetailsPage extends StatelessWidget {
                                                     ),
                                                   ),
                                                 ),
-                                                // Container(
-                                                //   padding: EdgeInsets.symmetric(
-                                                //       horizontal: 10,
-                                                //       vertical: 8),
-                                                //   decoration: BoxDecoration(
-                                                //     border: Border.all(
-                                                //         color: Colors.white24),
-                                                //     borderRadius:
-                                                //         BorderRadius.circular(
-                                                //             8.r),
-                                                //   ),
-                                                //   child: Text(
-                                                //     'Adventure',
-                                                //     style: TextStyle(
-                                                //       color: Colors.white,
-                                                //       fontSize: 13.sp,
-                                                //     ),
-                                                //   ),
-                                                // ),
-                                                // Container(
-                                                //   padding: EdgeInsets.symmetric(
-                                                //       horizontal: 10,
-                                                //       vertical: 8),
-                                                //   decoration: BoxDecoration(
-                                                //     border: Border.all(
-                                                //         color: Colors.white24),
-                                                //     borderRadius:
-                                                //         BorderRadius.circular(
-                                                //             8),
-                                                //   ),
-                                                //   child: Text(
-                                                //     'Family',
-                                                //     style: TextStyle(
-                                                //       color: Colors.white,
-                                                //       fontSize: 13,
-                                                //     ),
-                                                //   ),
-                                                // )
                                               ],
                                             ),
                                             SizedBox(

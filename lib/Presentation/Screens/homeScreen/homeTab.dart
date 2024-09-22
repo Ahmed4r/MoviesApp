@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
@@ -24,6 +26,7 @@ class _HomeTabState extends State<HomeTab> {
   static Map<int, bool> favoriteMovies = {};
   bool isfav = false;
   late Future<HometabResponse> hometabResponse;
+  MovieDetailsPage detailsPage = MovieDetailsPage();
 
   @override
   void initState() {
@@ -31,8 +34,6 @@ class _HomeTabState extends State<HomeTab> {
     hometabResponse = ApiManager.getAllTopSide();
     widget.viewmodel.showMovies();
   }
-
-  final Uri _url = Uri.parse('https://www.youtube.com/watch?v=OzY2r2JXsDM');
 
   void toggleBookmark(int movieID) {
     setState(() {
@@ -51,7 +52,7 @@ class _HomeTabState extends State<HomeTab> {
           return Center(child: Text('Error: ${state.errorMessage}'));
         } else if (state is HometabSuccessStates) {
           final movies = state.response.results ?? [];
-          final primeMovie = movies[0];
+          // final primeMovie = movies[0];
 
           return Scaffold(
             backgroundColor: Colors.black,
@@ -71,7 +72,7 @@ class _HomeTabState extends State<HomeTab> {
 
                               /// Auto scroll interval.
                               /// Do not auto scroll with null or 0.
-                              autoPlayInterval: 3000,
+                              autoPlayInterval: 5000,
 
                               /// Loops back to first slide.
                               isLoop: true,
@@ -119,7 +120,38 @@ class _HomeTabState extends State<HomeTab> {
                                                 255, 222, 214, 214),
                                           ),
                                           child: IconButton(
-                                            onPressed: _launchUrl,
+                                            onPressed: () async {
+                                              // Fetch movie details
+                                              detailsPage.moviecubit.getMovie(
+                                                  movies[i].id.toString());
+
+                                              // Check if movie data is available
+                                              if (detailsPage
+                                                      .moviecubit.movie !=
+                                                  null) {
+                                                final String imdbId =
+                                                    detailsPage.moviecubit.movie
+                                                            .imdbId ??
+                                                        '';
+
+                                                if (imdbId.isNotEmpty) {
+                                                  final Uri url = Uri.parse(
+                                                      '${Const.imdb}$imdbId');
+                                                  print('Launching URL: $url');
+
+                                                  // Launch URL
+                                                  try {
+                                                    await _launchUrl(url);
+                                                  } catch (e) {
+                                                    log('Error launching URL: $e');
+                                                  }
+                                                } else {
+                                                  log('IMDb ID not found for movie: ${movies[i].title}');
+                                                }
+                                              } else {
+                                                log('Movie details not available for movie: ${movies[i].title}');
+                                              }
+                                            },
                                             icon: Icon(
                                               Icons.play_arrow,
                                               size: 50.sp,
@@ -152,7 +184,8 @@ class _HomeTabState extends State<HomeTab> {
                                                   child: IconButton(
                                                     onPressed: () {
                                                       toggleBookmark(
-                                                          primeMovie.id ?? 1);
+                                                          movies[i].id ?? 1);
+                                                      print('${movies[i].id}');
                                                     },
                                                     icon: Icon(
                                                       isfav
@@ -162,7 +195,7 @@ class _HomeTabState extends State<HomeTab> {
                                                               .bookmark_add_outlined,
                                                       color: isfav
                                                           ? Colors.yellow
-                                                          : Colors.blueGrey,
+                                                          : Colors.white,
                                                       size: 30.sp,
                                                     ),
                                                   ),
@@ -272,13 +305,19 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Future<void> _launchUrl() async {
-    if (!await launchUrl(
-      _url,
-      mode: LaunchMode.inAppWebView,
-      webViewConfiguration: const WebViewConfiguration(enableJavaScript: true),
-    )) {
-      throw Exception('Could not launch $_url');
+  Future<void> _launchUrl(Uri url) async {
+    try {
+      if (!await launchUrl(
+        url,
+        mode: LaunchMode
+            .externalApplication, // Use the appropriate mode for launching externally
+        webViewConfiguration:
+            const WebViewConfiguration(enableJavaScript: true),
+      )) {
+        throw Exception('Could not launch $url');
+      }
+    } catch (e) {
+      log('Failed to launch URL: $e');
     }
   }
 }
