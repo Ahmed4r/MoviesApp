@@ -62,13 +62,17 @@ static Future<void> addMovieToFirestore(String title, String imagePath, String d
     print('Failed to add movie: $e');
   }
 }
-static Stream<List<Map<String, dynamic>>> getFavMoviesStream() {
+
+static Future<List<Map<String, dynamic>>> getFavMovies() async {
   // Reference to Firestore collection 'FavMovie'
   CollectionReference movies = FirebaseFirestore.instance.collection('FavMovie');
 
-  // Get a stream of snapshots from the collection
-  return movies.snapshots().map((QuerySnapshot querySnapshot) {
-    return querySnapshot.docs.map((doc) {
+  try {
+    // Get all documents from the 'FavMovie' collection
+    QuerySnapshot querySnapshot = await movies.get();
+
+    // Map each document to a list of movie data
+    List<Map<String, dynamic>> favMovies = querySnapshot.docs.map((doc) {
       return {
         'id': doc.id,
         'title': doc['title'],
@@ -76,8 +80,15 @@ static Stream<List<Map<String, dynamic>>> getFavMoviesStream() {
         'description': doc['description'],
       };
     }).toList();
-  });
+
+    return favMovies;
+  } catch (e) {
+    print('Failed to get movies: $e');
+    return [];
+  }
 }
+
+
 
 
 
