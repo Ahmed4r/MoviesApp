@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movies_app/Provider/Provider.dart';
 import 'package:movies_app/Shared/Text_Theme.dart';
 import 'package:movies_app/data/FireStore/FireStore.dart';
+import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 
 class WatchListTab extends StatefulWidget {
@@ -15,6 +17,7 @@ class WatchListTab extends StatefulWidget {
 class _WatchListTabState extends State<WatchListTab> {
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(

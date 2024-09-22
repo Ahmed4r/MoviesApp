@@ -12,8 +12,10 @@ import 'package:movies_app/Presentation/Screens/homeScreen/Movie_details.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/homeTab.dart';
 import 'package:movies_app/Presentation/Screens/watchListScreen/WatchListTab.dart';
 import 'package:movies_app/Presentation/SplashScreen/splashScreen.dart';
+import 'package:movies_app/Provider/Provider.dart';
 import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
 import 'package:movies_app/widgets/bottomNav.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +34,11 @@ void main() async {
 
   await FirebaseFirestore.instance.disableNetwork();
   Bloc.observer = MyBlocObserver();
-  runApp(const MyApp());
+
+  runApp(
+     MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => Providerr())
+  ], child: MyApp()));
 }
 
 class MyBlocObserver extends BlocObserver {
