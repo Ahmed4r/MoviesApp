@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/homeTab.dart';
 import 'package:movies_app/Shared/Text_Theme.dart';
-import 'package:movies_app/data/FireStore/FireStore.dart';
+
 import 'package:movies_app/data/api/MovieDetailsApi/MDStates.dart';
 import 'package:movies_app/data/api/MovieDetailsApi/MovieDetailsCubit.dart';
 import 'package:movies_app/data/api/const.dart';
@@ -363,11 +363,7 @@ class MovieCard extends StatelessWidget {
                 left: -11.w,
                 child: IconButton(
                   onPressed: () {
-                    Firestore.addMovieToFirestore(
-                        context,
-                        title ?? '',
-                        '${Const.imagepath}${imageUrl}' ?? '',
-                        overView ?? "");
+                 
                   },
                   icon: Icon(
                     Icons.bookmark_add_outlined,

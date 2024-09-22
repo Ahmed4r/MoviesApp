@@ -9,7 +9,6 @@ import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabStates.d
 import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabViewmodel.dart';
 
 import 'package:movies_app/Shared/app_color.dart';
-import 'package:movies_app/data/FireStore/FireStore.dart';
 
 import 'package:movies_app/data/api/Api_manger.dart';
 import 'package:movies_app/data/api/const.dart';
@@ -194,13 +193,6 @@ class _HomeTabState extends State<HomeTab> {
                                                   left: 1.w,
                                                   child: IconButton(
                                                     onPressed: () {
-                                                      Firestore.addMovieToFirestore(
-                                                        context,
-                                                          movies[i].title ?? '',
-                                                          '${Const.imagepath}${movies[i].posterPath}' ??
-                                                              '',
-                                                          movies[i].overview ??
-                                                              "");
                                                       toggleBookmark(
                                                           movies[i].id ?? 1);
                                                       print('${movies[i].id}');

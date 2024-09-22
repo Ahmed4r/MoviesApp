@@ -36,17 +36,17 @@ class SearchTab extends StatelessWidget {
                       viewmodel.searchMovie(search: value);
                     },
                     decoration: InputDecoration(
-                      icon: Icon(Icons.search, color: Colors.amber),
+                      prefix: Icon(Icons.search, color: Colors.white),
                       labelText: 'Search For Movie',
                       labelStyle: TextStyle(color: Colors.white),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.amber, width: 1.0),
-                        borderRadius: BorderRadius.circular(12.0),
+                        borderRadius: BorderRadius.circular(40.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide:
                             BorderSide(color: Colors.blueAccent, width: 2.0),
-                        borderRadius: BorderRadius.circular(12.0),
+                        borderRadius: BorderRadius.circular(40.0),
                       ),
                       filled: true,
                       fillColor: Colors.black,
