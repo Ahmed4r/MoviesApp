@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:movies_app/data/api/MovieDetailsApi/movie_details_response.dart';
 import 'package:movies_app/data/api/endpoints.dart';
 import 'package:movies_app/model/Browse/CategoryNameResponse.dart';
+import 'package:movies_app/model/Browse/movieDiscoverResponse.dart';
 
 
 import 'package:movies_app/model/hometabmodel/NewRealeases.dart';
@@ -30,7 +31,7 @@ class ApiManager {
     }
   }
 
-  static Future<List<Results>> getNewRealeases() async {
+  static Future<List<Response>> getNewRealeases() async {
     try {
       Uri url = Uri.https(baseUrl, Endpoints.New_Realeases, {
         'language': 'en-US',
@@ -46,7 +47,7 @@ class ApiManager {
         // return HometabResponse.fromJson(jsonDecode(response.body)['results'] as List  );
         final decodedData = json.decode(response.body)['results'] as List;
         // print(decodedData);
-        return decodedData.map((newr) => Results.fromJson(newr)).toList();
+        return decodedData.map((newr) => Response.fromJson(newr)).toList();
       } else {
         throw Exception(
             "Failed to load data. Status code: ${response.statusCode}");
@@ -117,5 +118,25 @@ class ApiManager {
     }
   }
 
- 
+  // browes Api :
+  static Future<MovieDiscoverResponse> getMoviesByGenre(int genreId) async {
+    try {
+      Uri url = Uri.https(baseUrl, Endpoints.Discover_Movies, {
+        'api_key': apiKey,
+        'with_genres': genreId.toString(),
+        'language': 'en-US',
+        'page': '1',
+      });
+
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        return MovieDiscoverResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception("Failed to load movies");
+      }
+    } catch (e) {
+      throw Exception("Error fetching movies: $e");
+    }
+  }
 }

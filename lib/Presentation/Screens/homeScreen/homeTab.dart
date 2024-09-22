@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/Movie_details.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabStates.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabViewmodel.dart';
-import 'package:movies_app/Shared/app_color.dart';
 import 'package:movies_app/data/api/Api_manger.dart';
 import 'package:movies_app/data/api/const.dart';
 import 'package:movies_app/model/hometabmodel/hometabResponse.dart';

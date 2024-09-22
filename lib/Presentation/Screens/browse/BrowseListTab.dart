@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies_app/Presentation/Screens/browse/cubit/browsestates.dart';
-import 'package:movies_app/Presentation/Screens/browse/cubit/browseviewmodel.dart';
+import 'package:movies_app/Presentation/Screens/browse/cubit/Discover%20ViewModel.dart';
+import 'package:movies_app/Presentation/Screens/browse/cubit/DiscoverStates.dart';
 import 'package:movies_app/Presentation/Screens/browse/gridItem.dart';
 
 class BrowseListTab extends StatelessWidget {
   static const String routename = 'browselisttab';
 
-  List<String?> genreImages = [
-    'https://siskiyou.sou.edu/wp-content/uploads/2022/03/intro-1644532027.webp', // Action
-    'https://www.airband.co.uk/wp-content/uploads/2022/07/Raiders-of-the-Lost-Ark.jpg', // Adventure
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAzu5nkrt8Jm_297qMMJsT_j7uI1vz47zCrw&s', // Animation
-    'https://i.ytimg.com/vi/BbjnVOaPmxQ/maxresdefault.jpg', // Comedy
-    'https://s.studiobinder.com/wp-content/uploads/2019/11/73-Best-Crime-Movies-Featured-StudioBinder-min.jpg', // Crime
-    'https://teara.govt.nz/files/hero-43588.jpg', // Documentary
-    'https://imgix.ranker.com/list_img_v2/15181/2775181/original/2775181-u1?auto=format&q=50&fit=crop&fm=pjpg&dpr=2&crop=faces&h=185.86387434554973&w=355', // Drama
-    'https://content.active.com/Assets/Active.com+Content+Site+Digital+Assets/Kids/Articles/Family+Movies+That+Will+Inspire+Your+Young+Artist/family+movie+night-carousel.jpg', // Family
-    'https://static1.moviewebimages.com/wordpress/wp-content/uploads/2023/07/the-20-best-fantasy-movies-of-all-time.jpg', // Fantasy
+
+   List<String?> genreImages = [
+    'https://siskiyou.sou.edu/wp-content/uploads/2022/03/intro-1644532027.webp',  // Action
+    'https://www.airband.co.uk/wp-content/uploads/2022/07/Raiders-of-the-Lost-Ark.jpg',  // Adventure
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAzu5nkrt8Jm_297qMMJsT_j7uI1vz47zCrw&s',  // Animation
+    'https://i.ytimg.com/vi/BbjnVOaPmxQ/maxresdefault.jpg',  // Comedy
+    'https://s.studiobinder.com/wp-content/uploads/2019/11/73-Best-Crime-Movies-Featured-StudioBinder-min.jpg',  // Crime
+    'https://teara.govt.nz/files/hero-43588.jpg',  // Documentary
+    'https://imgix.ranker.com/list_img_v2/15181/2775181/original/2775181-u1?auto=format&q=50&fit=crop&fm=pjpg&dpr=2&crop=faces&h=185.86387434554973&w=355',  // Drama
+    'https://content.active.com/Assets/Active.com+Content+Site+Digital+Assets/Kids/Articles/Family+Movies+That+Will+Inspire+Your+Young+Artist/family+movie+night-carousel.jpg',  // Family
+    'https://static1.moviewebimages.com/wordpress/wp-content/uploads/2023/07/the-20-best-fantasy-movies-of-all-time.jpg',  // Fantasy
     'https://content.artofmanliness.com/uploads/2021/05/1917.jpeg', // History
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT47EmZBv44QZxyrW66MZHYVwPjMSkXyNU9UA&s', // Horror
     'https://www.rollingstone.com/wp-content/uploads/2018/06/rs-247999-RS-10_Great_Music_Movies.jpg', // Music
@@ -32,8 +33,8 @@ class BrowseListTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => Browseviewmodel()..getBrowseNames(),
-      child: BlocBuilder<Browseviewmodel, Browsestates>(
+      create: (context) => BrowseViewModel()..getBrowseNames(),
+      child: BlocBuilder<BrowseViewModel, BrowseStates>(
         builder: (context, state) {
           if (state is BrowseLoadingStates) {
             return Center(child: CircularProgressIndicator());
@@ -52,11 +53,17 @@ class BrowseListTab extends StatelessWidget {
                   ),
                   itemCount: genres.length,
                   itemBuilder: (context, index) {
-                    return GridItem(
-                      genreName: genres[index].name ?? 'Unknown',
-                      imageUrl: genreImages[index] ??
-                          "https://static3.bigstockphoto.com/8/8/1/large1500/188264848.jpg",
+                    return GestureDetector(
+                      onTap: () {
+                        // No need to navigate here, it's handled in GridItem
+                      },
+                      child: GridItem(
+                        genreName: genres[index].name ?? 'Unknown',
+                        imageUrl: genreImages[index] ?? "https://static3.bigstockphoto.com/8/8/1/large1500/188264848.jpg",
+                        genreId: genres[index].id!, // Pass genreId here
+                      ),
                     );
+
                   },
                 ),
               ),

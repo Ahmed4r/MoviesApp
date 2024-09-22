@@ -41,7 +41,10 @@ dependencies:
   url_launcher: ^6.3.0
   readmore: ^3.0.0
   flutter_image_slideshow: ^0.1.6
+
+
   shared_preferences: ^2.3.2
+
 
 dev_dependencies:
   flutter_test:
