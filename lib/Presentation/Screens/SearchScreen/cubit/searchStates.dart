@@ -6,12 +6,14 @@ class SearchInitState extends Searchstates {}
 
 class SearchLoadingState extends Searchstates {}
 
+
+
 class SearchSuccessState extends Searchstates {
-  SearchResponse response ;
+  SearchResponse response;
   SearchSuccessState({required this.response});
 }
 
 class SearchErrorState extends Searchstates {
-  final String errorMessage ;
+  final String errorMessage;
   SearchErrorState({required this.errorMessage});
 }

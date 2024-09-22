@@ -6,6 +6,7 @@ import 'package:movies_app/Presentation/Screens/SearchScreen/cubit/searchStates.
 import 'package:movies_app/Presentation/Screens/homeScreen/Movie_details.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabViewmodel.dart';
 import 'package:movies_app/data/api/const.dart';
+import 'package:readmore/readmore.dart';
 
 class SearchTab extends StatelessWidget {
   static const String routename = 'searchtab';
@@ -126,6 +127,19 @@ class SearchTab extends StatelessWidget {
                                         SizedBox(height: 5.0),
                                         Text(
                                           movie.releaseDate ?? '',
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: 14
+                                                .sp, // Use ScreenUtil for responsive text size
+                                          ),
+                                        ),
+                                        ReadMoreText(
+                                          movie.overview ?? '',
+                                          trimMode: TrimMode.Line,
+                                          colorClickableText: Colors.pink,
+                                          trimCollapsedText: 'Show more',
+                                          trimExpandedText: 'Show less',
+                                          trimLines: 2,
                                           style: TextStyle(
                                             color: Colors.white70,
                                             fontSize: 14
