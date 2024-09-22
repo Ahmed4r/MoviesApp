@@ -57,7 +57,7 @@ class WatchListTab extends StatelessWidget {
   Widget _buildWatchlistItem(
       String imagePath, String title, String description) {
     return Container(
-      padding: EdgeInsets.all(5),
+        padding: EdgeInsets.all(5),
         height: 100.h,
         margin: EdgeInsets.only(bottom: 15),
         color: Colors.black,
@@ -89,10 +89,9 @@ class WatchListTab extends StatelessWidget {
               ],
             ),
             Container(
-              
               width: 200.w,
               child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
