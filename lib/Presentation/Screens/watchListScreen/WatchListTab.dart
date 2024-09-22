@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movies_app/Shared/Text_Theme.dart';
 import 'package:movies_app/data/FireStore/FireStore.dart';
+import 'package:readmore/readmore.dart';
 
 class WatchListTab extends StatelessWidget {
-    static const String routename = 'watchlisttab';
+  static const String routename = 'watchlisttab';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text('Favorite Movies'),
+        title: Text(
+          'watch list',
+          style: TextThemee.bodyLargeWhite,
+        ),
         backgroundColor: Colors.black,
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -28,20 +35,74 @@ class WatchListTab extends StatelessWidget {
             itemCount: favMovies.length,
             itemBuilder: (context, index) {
               final movie = favMovies[index];
-              return Card(
+              return Container(
+
+                color: Colors.black,
                 margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                child: ListTile(
-                  leading: Image.network(
-                    movie['imagePath'] ?? '',
-                    width: 50,
-                    height: 75,
-                    fit: BoxFit.cover,
-                  ),
-                  title: Text(movie['title'] ?? 'Unknown'),
-                  subtitle: Text(movie['description'] ?? 'No description available'),
-                  onTap: () {
-                    // Handle movie tap (e.g., navigate to details page)
-                  },
+                child: Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(right: 15),
+                      width: 100,
+                      height: 130,
+                      child: Image.network(
+                        movie['imagePath'] ?? '',
+                        filterQuality: FilterQuality.high,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Container(
+                      width:200,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            movie['title'] ?? 'Unknown',
+                            style: TextThemee.bodymidWhite,
+                          ),
+                          ReadMoreText(
+                            style: TextThemee.bodymidWhite.copyWith(
+                                fontSize: 15, fontWeight: FontWeight.w300),
+                            movie['description'] ?? 'No description available',
+                            trimMode: TrimMode.Line,
+                            trimLines: 4,
+                            colorClickableText: Colors.pink,
+                            trimCollapsedText: 'Show more',
+                            trimExpandedText: 'Show less',
+                            moreStyle: TextStyle(
+                                color: Colors.pink,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    )
+                    // ListTile(
+                    //   dense: true,
+                    //   visualDensity: VisualDensity(vertical: 4),
+                    //   title: Text(
+                    //     movie['title'] ?? 'Unknown',
+                    //     style: TextThemee.bodymidWhite,
+                    //   ),
+                    //   subtitle: ReadMoreText(
+                    //     style: TextThemee.bodymidWhite.copyWith(
+                    //         fontSize: 15, fontWeight: FontWeight.w300),
+                    //     movie['description'] ?? 'No description available',
+                    //     trimMode: TrimMode.Line,
+                    //     trimLines: 4,
+                    //     colorClickableText: Colors.pink,
+                    //     trimCollapsedText: 'Show more',
+                    //     trimExpandedText: 'Show less',
+                    //     moreStyle: TextStyle(
+                    //         color: Colors.pink,
+                    //         fontSize: 14,
+                    //         fontWeight: FontWeight.bold),
+                    //   ),
+                    //   onTap: () {
+                    //     // Handle movie tap (e.g., navigate to details page)
+                    //   },
+                    // ),
+                  ],
                 ),
               );
             },

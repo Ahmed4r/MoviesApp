@@ -62,7 +62,8 @@ class Newrealseswidget extends StatelessWidget {
                   final isfav = favoriteMovies[movie.id] ??
                       false; // Check if movie is favorited
 
-                  return Stack(
+                  return 
+                  Stack(
                     children: [
                       InkWell(
                         onTap: () {
