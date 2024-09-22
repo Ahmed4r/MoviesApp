@@ -1,10 +1,11 @@
 class NewRealeases {
   NewRealeases({
-      this.dates, 
-      this.page, 
-      this.results, 
-      this.totalPages, 
-      this.totalResults,});
+    this.dates,
+    this.page,
+    this.results,
+    this.totalPages,
+    this.totalResults,
+  });
 
   NewRealeases.fromJson(dynamic json) {
     dates = json['dates'] != null ? Dates.fromJson(json['dates']) : null;
@@ -12,7 +13,7 @@ class NewRealeases {
     if (json['results'] != null) {
       results = [];
       json['results'].forEach((v) {
-        results?.add(Results.fromJson(v));
+        results?.add(Response.fromJson(v));
       });
     }
     totalPages = json['total_pages'];
@@ -20,7 +21,7 @@ class NewRealeases {
   }
   Dates? dates;
   int? page;
-  List<Results>? results;
+  List<Response>? results;
   int? totalPages;
   int? totalResults;
 
@@ -37,27 +38,27 @@ class NewRealeases {
     map['total_results'] = totalResults;
     return map;
   }
-
 }
 
-class Results {
-  Results({
-      this.adult, 
-      this.backdropPath, 
-      this.genreIds, 
-      this.id, 
-      this.originalLanguage, 
-      this.originalTitle, 
-      this.overview, 
-      this.popularity, 
-      this.posterPath, 
-      this.releaseDate, 
-      this.title, 
-      this.video, 
-      this.voteAverage, 
-      this.voteCount,});
+class Response {
+  Response({
+    this.adult,
+    this.backdropPath,
+    this.genreIds,
+    this.id,
+    this.originalLanguage,
+    this.originalTitle,
+    this.overview,
+    this.popularity,
+    this.posterPath,
+    this.releaseDate,
+    this.title,
+    this.video,
+    this.voteAverage,
+    this.voteCount,
+  });
 
-  Results.fromJson(dynamic json) {
+  Response.fromJson(dynamic json) {
     adult = json['adult'];
     backdropPath = json['backdrop_path'];
     genreIds = json['genre_ids'] != null ? json['genre_ids'].cast<int>() : [];
@@ -106,13 +107,13 @@ class Results {
     map['vote_count'] = voteCount;
     return map;
   }
-
 }
 
 class Dates {
   Dates({
-      this.maximum, 
-      this.minimum,});
+    this.maximum,
+    this.minimum,
+  });
 
   Dates.fromJson(dynamic json) {
     maximum = json['maximum'];
@@ -127,5 +128,4 @@ class Dates {
     map['minimum'] = minimum;
     return map;
   }
-
 }
