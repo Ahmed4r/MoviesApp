@@ -7,9 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Presentation/Screens/SearchScreen/SearchTab.dart';
 import 'package:movies_app/Presentation/Screens/browse/BrowseListTab.dart';
-import 'package:movies_app/Presentation/Screens/browse/MovieList.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/Movie_details.dart';
-import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabViewmodel.dart';
 
 import 'package:movies_app/Presentation/Screens/homeScreen/homeTab.dart';
 import 'package:movies_app/Presentation/Screens/watchListScreen/WatchListTab.dart';
