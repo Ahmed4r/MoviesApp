@@ -84,11 +84,9 @@ class Newrealseswidget extends StatelessWidget {
                         right: 44.w,
                         child: IconButton(
                           onPressed: () {
-                            isfav
-                                ?
-                                Firestore.removeMovieByTitle(movie.title??'')
-                                :
+                            
                             Firestore.addMovieToFirestore(
+                              context,
                               movie.title??'',
                               '${Const.imagepath}${movie.posterPath}'??'',
                               movie.overview??""

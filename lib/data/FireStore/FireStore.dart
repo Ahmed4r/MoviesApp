@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class Firestore {
 
@@ -42,7 +43,7 @@ static Future<void> removeMovieByTitle(String title) async {
   }
 }
 
-static Future<void> addMovieToFirestore(String title, String imagePath, String description) async {
+static Future<void> addMovieToFirestore(BuildContext context,String title, String imagePath, String description) async {
   // Reference to Firestore collection 'FavMovie'
   CollectionReference movies = FirebaseFirestore.instance.collection('FavMovie');
 
@@ -57,8 +58,19 @@ static Future<void> addMovieToFirestore(String title, String imagePath, String d
   try {
     // Add movie details to Firestore
     await movies.add(movieData);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      duration: Duration(seconds: 3),
+      content: Text('Movie added to Firestore'),
+      action: SnackBarAction(label: "close", onPressed: () {}),
+    ));
+
     print('Movie added to Firestore');
   } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      duration: Duration(seconds: 3),
+      content: Text('Failed to add movie: $e'),
+      action: SnackBarAction(label: "close", onPressed: () {}),
+    ));
     print('Failed to add movie: $e');
   }
 }

@@ -6,8 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/homeTab.dart';
 import 'package:movies_app/Presentation/SplashScreen/splashScreen.dart';
 import 'package:movies_app/Shared/Text_Theme.dart';
+import 'package:movies_app/data/FireStore/FireStore.dart';
 import 'package:movies_app/data/api/MovieDetailsApi/MDStates.dart';
 import 'package:movies_app/data/api/MovieDetailsApi/MovieDetailsCubit.dart';
+import 'package:movies_app/data/api/const.dart';
 import 'package:movies_app/widgets/bottomNav.dart';
 import 'package:readmore/readmore.dart';
 
@@ -23,7 +25,6 @@ class MovieDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
-    
 
     final id = arguments['movieID'];
 
@@ -329,6 +330,7 @@ class MovieDetailsPage extends StatelessWidget {
                                             });
                                       },
                                       child: MovieCard(
+                                        overView:data[index].overview,
                                           rate: data[index]
                                               .voteAverage
                                               .toString(),
@@ -363,9 +365,10 @@ class MovieCard extends StatelessWidget {
   final String title;
   final String imageUrl;
   final String rate;
+  final String overView;
 
   const MovieCard(
-      {required this.title, required this.imageUrl, required this.rate});
+      {required this.title, required this.imageUrl, required this.rate, required this.overView});
 
   @override
   Widget build(BuildContext context) {
@@ -395,7 +398,13 @@ class MovieCard extends StatelessWidget {
                 top: -8.h,
                 left: -11.w,
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Firestore.addMovieToFirestore(
+                        context,
+                        title ?? '',
+                        '${Const.imagepath}${imageUrl}' ?? '',
+                        overView ?? "");
+                  },
                   icon: Icon(
                     Icons.bookmark_add_outlined,
                     color: Colors.white,

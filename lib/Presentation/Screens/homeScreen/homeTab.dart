@@ -160,19 +160,13 @@ class _HomeTabState extends State<HomeTab> {
                                                   left: 1.w,
                                                   child: IconButton(
                                                     onPressed: () {
-                                                      isfav
-                                                          ? Firestore
-                                                              .removeMovieByTitle(
-                                                                  movies[i].title ??
-                                                                      '')
-                                                          : Firestore.addMovieToFirestore(
-                                                              movies[i].title ??
-                                                                  '',
-                                                              '${Const.imagepath}${movies[i].posterPath}' ??
-                                                                  '',
-                                                              movies[i]
-                                                                      .overview ??
-                                                                  "");
+                                                      Firestore.addMovieToFirestore(
+                                                        context,
+                                                          movies[i].title ?? '',
+                                                          '${Const.imagepath}${movies[i].posterPath}' ??
+                                                              '',
+                                                          movies[i].overview ??
+                                                              "");
                                                       toggleBookmark(
                                                           primeMovie.id ?? 1);
                                                     },

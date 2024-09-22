@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/Movie_details.dart';
+import 'package:movies_app/data/FireStore/FireStore.dart';
 import 'package:movies_app/data/api/const.dart';
 import 'package:movies_app/model/hometabmodel/RecommendedResponse.dart';
 
@@ -89,13 +90,16 @@ class _RecommndedwidgetState extends State<Recommndedwidget> {
                         right: 44.w,
                         child: IconButton(
                           onPressed: () {
+                            Firestore.addMovieToFirestore(
+                              context,
+                                movie.title ?? '',
+                                '${Const.imagepath}${movie.posterPath}' ?? '',
+                                movie.overview ?? "");
                             widget.toggleBookmark(
                                 movie.id ?? 1); // Toggle favorite status
                           },
                           icon: Icon(
-                            isfav
-                                ? Icons.bookmark_added_outlined
-                                : Icons.bookmark_add_outlined,
+                            Icons.bookmark_add_outlined,
                             color: isfav ? Colors.yellow : Colors.white,
                             size: 30.sp,
                           ),

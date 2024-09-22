@@ -5,8 +5,14 @@ import 'package:movies_app/Shared/Text_Theme.dart';
 import 'package:movies_app/data/FireStore/FireStore.dart';
 import 'package:readmore/readmore.dart';
 
-class WatchListTab extends StatelessWidget {
+class WatchListTab extends StatefulWidget {
   static const String routename = 'watchlisttab';
+
+  @override
+  State<WatchListTab> createState() => _WatchListTabState();
+}
+
+class _WatchListTabState extends State<WatchListTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +32,11 @@ class WatchListTab extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No favorite movies found'));
+            return Center(
+                child: Text(
+              'No favorite movies found',
+              style: TextThemee.bodymidWhite,
+            ));
           }
 
           // Data is available
@@ -36,10 +46,10 @@ class WatchListTab extends StatelessWidget {
             itemBuilder: (context, index) {
               final movie = favMovies[index];
               return Container(
-
                 color: Colors.black,
                 margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
                       padding: EdgeInsets.only(right: 15),
@@ -52,7 +62,7 @@ class WatchListTab extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      width:200,
+                      width: 200,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -76,7 +86,18 @@ class WatchListTab extends StatelessWidget {
                           ),
                         ],
                       ),
-                    )
+                    ),
+                    IconButton(
+                        onPressed: () async {
+                          await Firestore.removeMovieByTitle(movie['title']);
+                          setState(() {
+                            
+                          });
+                        },
+                        icon: Icon(
+                          Icons.bookmark_added_outlined,
+                          color: Colors.amber,
+                        ))
                     // ListTile(
                     //   dense: true,
                     //   visualDensity: VisualDensity(vertical: 4),
