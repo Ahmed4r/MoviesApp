@@ -17,20 +17,20 @@ import 'package:movies_app/widgets/bottomNav.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Platform.isAndroid
-      ? await Firebase.initializeApp(
-// Replace with actual values
-          options: const FirebaseOptions(
-            apiKey: "AIzaSyAvAwJlK6-Auyi9aZ6S4ZQuSqTeql1PYZA",
-            appId: "com.example.movies",
-            messagingSenderId: "783313137991",
-            projectId: "e-commerce-route-8edfa",
-          ),
-        )
-      : await Firebase.initializeApp();
+//   Platform.isAndroid
+//       ? await Firebase.initializeApp(
+// // Replace with actual values
+//           options: FirebaseOptions(
+//             apiKey: "AIzaSyAtnQm_VVzaunANl6hM5BVwl0BsfgHiIwM",
+//             appId: "com.example.movies",
+//             messagingSenderId: "348629568610",
+//             projectId: "movies-app-95b8b",
+//           ),
+//         )
+//       :
+      //  await Firebase.initializeApp();
 
-
-  await FirebaseFirestore.instance.disableNetwork();
+  // await FirebaseFirestore.instance.disableNetwork();
   Bloc.observer = MyBlocObserver();
   runApp(const MyApp());
 }

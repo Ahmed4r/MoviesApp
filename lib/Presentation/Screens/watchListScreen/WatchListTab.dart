@@ -89,8 +89,8 @@ class _WatchListTabState extends State<WatchListTab> {
                     ),
                     IconButton(
                         onPressed: () async {
-                          await Firestore.removeMovieByTitle(movie['title']);
-                          setState(() {});
+                          // await Firestore.removeMovieByTitle(movie['title']);
+                          // setState(() {});
                         },
                         icon: Icon(
                           Icons.bookmark_added_outlined,
