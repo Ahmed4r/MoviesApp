@@ -1,11 +1,10 @@
 import 'package:movies_app/Presentation/Screens/browse/cubit/DiscoverStates.dart';
 import 'package:movies_app/model/Browse/MovieDiscoverResponse.dart';
 
-
 class MovieListLoadingState extends BrowseStates {}
 
 class MovieListSuccessState extends BrowseStates {
-   var movieResponse;
+  var movieResponse;
 
   MovieListSuccessState(this.movieResponse);
 }
