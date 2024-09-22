@@ -1,0 +1,84 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class Firestore {
+
+static Future<void> removeAllMovies() async {
+  // Reference to Firestore collection 'FavMovie'
+  CollectionReference movies = FirebaseFirestore.instance.collection('FavMovie');
+
+  try {
+    // Get all documents in the 'FavMovie' collection
+    QuerySnapshot querySnapshot = await movies.get();
+
+    // Loop through each document and delete it
+    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+      await doc.reference.delete();
+    }
+
+    print('All movies deleted successfully');
+  } catch (e) {
+    print('Failed to delete all movies: $e');
+  }
+}
+static Future<void> removeMovieByTitle(String title) async {
+  // Reference to Firestore collection 'FavMovie'
+  CollectionReference movies = FirebaseFirestore.instance.collection('FavMovie');
+
+  try {
+    // Query the 'FavMovie' collection for documents where the 'title' matches
+    QuerySnapshot querySnapshot = await movies.where('title', isEqualTo: title).get();
+
+    // Loop through the documents and delete each one
+    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+      await doc.reference.delete();
+      print('Movie with title "$title" deleted successfully');
+    }
+
+    if (querySnapshot.docs.isEmpty) {
+      print('No movie found with the title "$title"');
+    }
+  } catch (e) {
+    print('Failed to remove movie: $e');
+  }
+}
+
+static Future<void> addMovieToFirestore(String title, String imagePath, String description) async {
+  // Reference to Firestore collection 'FavMovie'
+  CollectionReference movies = FirebaseFirestore.instance.collection('FavMovie');
+
+  // Data to be added
+  Map<String, dynamic> movieData = {
+    'title': title,
+    'imagePath': imagePath,
+    'description': description,
+    'timestamp': FieldValue.serverTimestamp(),  // Optional: to track when the movie was added
+  };
+
+  try {
+    // Add movie details to Firestore
+    await movies.add(movieData);
+    print('Movie added to Firestore');
+  } catch (e) {
+    print('Failed to add movie: $e');
+  }
+}
+static Stream<List<Map<String, dynamic>>> getFavMoviesStream() {
+  // Reference to Firestore collection 'FavMovie'
+  CollectionReference movies = FirebaseFirestore.instance.collection('FavMovie');
+
+  // Get a stream of snapshots from the collection
+  return movies.snapshots().map((QuerySnapshot querySnapshot) {
+    return querySnapshot.docs.map((doc) {
+      return {
+        'id': doc.id,
+        'title': doc['title'],
+        'imagePath': doc['imagePath'],
+        'description': doc['description'],
+      };
+    }).toList();
+  });
+}
+
+
+
+}

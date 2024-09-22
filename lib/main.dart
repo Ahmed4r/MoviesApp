@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,7 +17,22 @@ import 'package:movies_app/Presentation/SplashScreen/splashScreen.dart';
 import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
 import 'package:movies_app/widgets/bottomNav.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Platform.isAndroid
+      ? await Firebase.initializeApp(
+// Replace with actual values
+          options: const FirebaseOptions(
+            apiKey: "AIzaSyAvAwJlK6-Auyi9aZ6S4ZQuSqTeql1PYZA",
+            appId: "com.example.movies",
+            messagingSenderId: "783313137991",
+            projectId: "e-commerce-route-8edfa",
+          ),
+        )
+      : await Firebase.initializeApp();
+
+
+  await FirebaseFirestore.instance.disableNetwork();
   Bloc.observer = MyBlocObserver();
   runApp(const MyApp());
 }
@@ -76,13 +95,9 @@ class MyApp extends StatelessWidget {
             BrowseListTab.routename: (context) => BrowseListTab(),
             SearchTab.routename: (context) => SearchTab(),
             WatchListTab.routename: (context) => WatchListTab(),
-
-
           },
         );
       },
     );
   }
 }
-
-
