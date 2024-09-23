@@ -189,35 +189,7 @@ class _HomeTabState extends State<HomeTab> {
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
-                                                Positioned(
-                                                  top: 1.h,
-                                                  left: 1.w,
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      Firestore.addMovieToFirestore(
-                                                        context,
-                                                          movies[i].title ?? '',
-                                                          '${Const.imagepath}${movies[i].posterPath}' ??
-                                                              '',
-                                                          movies[i].overview ??
-                                                              "");
-                                                      toggleBookmark(
-                                                          movies[i].id ?? 1);
-                                                      print('${movies[i].id}');
-                                                    },
-                                                    icon: Icon(
-                                                      isfav
-                                                          ? Icons
-                                                              .bookmark_added_outlined
-                                                          : Icons
-                                                              .bookmark_add_outlined,
-                                                      color: isfav
-                                                          ? Colors.yellow
-                                                          : Colors.white,
-                                                      size: 30.sp,
-                                                    ),
-                                                  ),
-                                                ),
+                                                
                                               ],
                                             ),
                                           ],

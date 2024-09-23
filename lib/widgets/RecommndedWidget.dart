@@ -19,6 +19,9 @@ class Recommndedwidget extends StatefulWidget {
     required this.toggleBookmark, // Accept toggleBookmark callback
     super.key,
   });
+  Future<bool> getFav(String title) async {
+    return await Firestore.isMovieInWatchlist(title);
+  }
 
   @override
   State<Recommndedwidget> createState() => _RecommndedwidgetState();
@@ -40,78 +43,98 @@ class _RecommndedwidgetState extends State<Recommndedwidget> {
 
         final data = snap.data!;
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 10.h),
-            Text(
-              widget.title,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 23.sp,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            SizedBox(height: 10.h),
-            SizedBox(
-              height: 127.h,
-              width: 400.w,
-              child: ListView.separated(
-                separatorBuilder: (context, index) {
-                  return SizedBox(width: 25.w);
-                },
-                scrollDirection: Axis.horizontal,
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  final movie = data[index];
-                  final isfav = widget.favoriteMovies[movie.id] ??
-                      false; // Check if movie is favorited
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    SizedBox(height: 10.h),
+    Text(
+      widget.title,
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 23.sp,
+        fontWeight: FontWeight.w400,
+      ),
+    ),
+    SizedBox(height: 10.h),
+    SizedBox(
+      height: 127.h,
+      width: 400.w,
+      child: ListView.separated(
+        separatorBuilder: (context, index) {
+          return SizedBox(width: 25.w);
+        },
+        scrollDirection: Axis.horizontal,
+        itemCount: data.length,
+        itemBuilder: (context, index) {
+          final movie = data[index];
 
-                  return Stack(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            MovieDetailsPage.routeName,
-                            arguments: {
-                              'movieID': movie.id.toString(),
-                              'movieslist': data
-                            },
-                          );
+          // Use FutureBuilder to handle async check for each movie's favorite status
+          return FutureBuilder<bool>(
+            future: Firestore.isMovieInWatchlist(movie.title!),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator()); // Optional: Show loading indicator
+              }
+
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}')); // Optional: Error handling
+              }
+
+              final isfav = snapshot.data ?? false; // Check if movie is favorited
+
+              return Stack(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        MovieDetailsPage.routeName,
+                        arguments: {
+                          'movieID': movie.id.toString(),
+                          'movieslist': data
                         },
-                        child: Image.network(
-                          '${Const.imagepath}${movie.posterPath}', // Ensure this is a full URL or handle base URL
-                          filterQuality: FilterQuality.high,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Positioned(
-                        top: -12.h,
-                        right: 44.w,
-                        child: IconButton(
-                          onPressed: () {
-                            Firestore.addMovieToFirestore(
+                      );
+                    },
+                    child: Image.network(
+                      '${Const.imagepath}${movie.posterPath}', // Ensure this is a full URL or handle base URL
+                      filterQuality: FilterQuality.high,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Positioned(
+                    top: -12.h,
+                    right: 44.w,
+                    child: IconButton(
+                      onPressed: () async {
+                        if (isfav) {
+                          // If it's in the watchlist, remove it
+                          Firestore.removeMovieByTitle(movie.title!);
+                        } else {
+                          // If it's not in the watchlist, add it
+                          Firestore.addMovieToFirestore(
                               context,
-                                movie.title ?? '',
-                                '${Const.imagepath}${movie.posterPath}' ?? '',
-                                movie.overview ?? "");
-                            widget.toggleBookmark(
-                                movie.id ?? 1); // Toggle favorite status
-                          },
-                          icon: Icon(
-                            Icons.bookmark_add_outlined,
-                            color: isfav ? Colors.yellow : Colors.white,
-                            size: 30.sp,
-                          ),
-                        ),
+                              movie.title ?? '',
+                              '${Const.imagepath}${movie.posterPath}' ?? '',
+                              movie.overview ?? "");
+                        }
+                        widget.toggleBookmark(movie.id ?? 1);
+                      },
+                      icon: Icon(
+                        isfav ? Icons.bookmark_added_outlined : Icons.bookmark_add_outlined,
+                        color: isfav ? Colors.yellow : Colors.white,
+                        size: 30.sp,
                       ),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ],
-        );
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      ),
+    ),
+  ],
+);
+
       },
     );
   }
