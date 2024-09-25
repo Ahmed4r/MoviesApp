@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "783313137991",
+    "project_id": "e-commerce-route-8edfa",
+    "storage_bucket": "e-commerce-route-8edfa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:783313137991:android:1f75742904b0596b491c62",
+        "android_client_info": {
+          "package_name": "com.example.movies"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvAwJlK6-Auyi9aZ6S4ZQuSqTeql1PYZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,12 +4,12 @@ import 'package:http/http.dart' as http;
 import 'package:movies_app/data/api/MovieDetailsApi/movie_details_response.dart';
 import 'package:movies_app/data/api/endpoints.dart';
 import 'package:movies_app/model/Browse/CategoryNameResponse.dart';
-
 import 'package:movies_app/model/Browse/movieDiscoverResponse.dart';
 
 import 'package:movies_app/model/hometabmodel/NewRealeases.dart';
 import 'package:movies_app/model/hometabmodel/RecommendedResponse.dart';
 import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
+import 'package:movies_app/model/searchmodel/searchResponse.dart';
 
 class ApiManager {
   static const String baseUrl = "api.themoviedb.org";
@@ -137,6 +137,30 @@ class ApiManager {
       }
     } catch (e) {
       throw Exception("Error fetching movies: $e");
+    }
+  }
+
+  //search
+  static Future<SearchResponse> searchMovie(String Search) async {
+    var headers = {
+      'accept': 'application/json',
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlN2MzOGFjMmFkNDZlMTNjZWRkZmJkODY4MWVmMDljNiIsIm5iZiI6MTcyNjU4MzMwMi4zMzU0NDEsInN1YiI6IjY2ZTk5MDEyMWJlY2E4Y2UwN2QyZTliYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.yfWSVG40lcpxu1MYOZOUEwY_15NdwS7JvIfDrFsEMhs'
+    };
+    try {
+      Uri url = Uri.https(
+          baseUrl, "${Endpoints.search_for_move_name}", {'query':Search});
+          
+      var response = await http.get(url, headers: headers);
+      if (response.statusCode == 200 && response.statusCode < 300) {
+        return SearchResponse.fromJson(jsonDecode(response.body));
+      }
+      else{
+        throw Exception('Failed to load movie details: ${response.statusCode}');
+      }
+      
+    } catch (e) {
+      throw e;
     }
   }
 }
