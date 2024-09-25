@@ -12,27 +12,31 @@ import 'package:movies_app/Presentation/Screens/homeScreen/Movie_details.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/homeTab.dart';
 import 'package:movies_app/Presentation/Screens/watchListScreen/WatchListTab.dart';
 import 'package:movies_app/Presentation/SplashScreen/splashScreen.dart';
+import 'package:movies_app/Provider/Provider.dart';
 import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
 import 'package:movies_app/widgets/bottomNav.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-//   Platform.isAndroid
-//       ? await Firebase.initializeApp(
-// // Replace with actual values
-//           options: FirebaseOptions(
-//             apiKey: "AIzaSyAtnQm_VVzaunANl6hM5BVwl0BsfgHiIwM",
-//             appId: "com.example.movies",
-//             messagingSenderId: "348629568610",
-//             projectId: "movies-app-95b8b",
-//           ),
-//         )
-//       :
-      //  await Firebase.initializeApp();
+  Platform.isAndroid
+      ? await Firebase.initializeApp(
+// Replace with actual values
+          options: const FirebaseOptions(
+            apiKey: "AIzaSyAvAwJlK6-Auyi9aZ6S4ZQuSqTeql1PYZA",
+            appId: "com.example.movies",
+            messagingSenderId: "783313137991",
+            projectId: "e-commerce-route-8edfa",
+          ),
+        )
+      : await Firebase.initializeApp();
 
-  // await FirebaseFirestore.instance.disableNetwork();
+  await FirebaseFirestore.instance.disableNetwork();
   Bloc.observer = MyBlocObserver();
-  runApp(const MyApp());
+
+  runApp(MultiProvider(
+      providers: [ChangeNotifierProvider(create: (context) => Providerr())],
+      child: MyApp()));
 }
 
 class MyBlocObserver extends BlocObserver {
