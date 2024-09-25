@@ -31,14 +31,12 @@ void main() async {
         )
       : await Firebase.initializeApp();
 
-
   await FirebaseFirestore.instance.disableNetwork();
   Bloc.observer = MyBlocObserver();
 
-  runApp(
-     MultiProvider(providers: [
-    ChangeNotifierProvider(create: (context) => Providerr())
-  ], child: MyApp()));
+  runApp(MultiProvider(
+      providers: [ChangeNotifierProvider(create: (context) => Providerr())],
+      child: MyApp()));
 }
 
 class MyBlocObserver extends BlocObserver {

@@ -10,6 +10,7 @@ import 'package:movies_app/Presentation/Screens/homeScreen/homeTab.dart';
 import 'package:movies_app/Provider/Provider.dart';
 import 'package:movies_app/Shared/Text_Theme.dart';
 import 'package:movies_app/data/FireStore/FireStore.dart';
+
 import 'package:movies_app/data/api/MovieDetailsApi/MDStates.dart';
 import 'package:movies_app/data/api/MovieDetailsApi/MovieDetailsCubit.dart';
 import 'package:movies_app/data/api/const.dart';
@@ -39,9 +40,6 @@ class MovieDetailsPage extends StatelessWidget {
         height: double.infinity,
         width: double.infinity,
         child: BlocBuilder<Moviedetailscubit, MovieDetailsStates>(
-
-            // bloc: moviecubit..getMovie(id),
-
             bloc: moviecubit..getMovie(id),
             builder: (context, state) {
               return state is MovieDetailsLoudingStates
@@ -139,8 +137,10 @@ class MovieDetailsPage extends StatelessWidget {
                                         },
                                         child: Text(
                                           "Add To WatchList",
-                                          style: TextThemee.bodymidWhite.copyWith(
-                                              color: Colors.amber, fontSize: 15),
+                                          style: TextThemee.bodymidWhite
+                                              .copyWith(
+                                                  color: Colors.amber,
+                                                  fontSize: 15),
                                         )),
                                   )
                                 ],
@@ -564,5 +564,15 @@ class _FavMovieCardState extends State<FavMovieCard> {
         ],
       ),
     );
+  }
+
+  void idwithdetails(context) {
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+
+    final id = arguments['movieID'];
+    Moviedetailscubit cubit = Moviedetailscubit();
+    cubit.getMovie(id.toString());
+    final imdp = '${Const.imdb}${cubit.movie.imdbId}';
   }
 }
