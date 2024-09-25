@@ -19,24 +19,41 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Platform.isAndroid
-      ? await Firebase.initializeApp(
-// Replace with actual values
-          options: const FirebaseOptions(
-            apiKey: "AIzaSyAvAwJlK6-Auyi9aZ6S4ZQuSqTeql1PYZA",
-            appId: "com.example.movies",
-            messagingSenderId: "783313137991",
-            projectId: "e-commerce-route-8edfa",
-          ),
-        )
-      : await Firebase.initializeApp();
 
+  try {
+    // Initialize Firebase for Android with FirebaseOptions
+    if (Platform.isAndroid) {
+      await Firebase.initializeApp(
+        options: const FirebaseOptions(
+          apiKey: "AIzaSyAvAwJlK6-Auyi9aZ6S4ZQuSqTeql1PYZA",
+          appId: "com.example.movies",
+          messagingSenderId: "783313137991",
+          projectId: "e-commerce-route-8edfa",
+        ),
+      );
+    } else {
+      // Initialize Firebase for other platforms
+      await Firebase.initializeApp();
+    }
+  } on FirebaseException catch (e) {
+    if (e.code == 'duplicate-app') {
+      print('Firebase App already initialized: ${e.message}');
+      // Firebase is already initialized, continue without re-initializing
+    } else {
+      rethrow; // Handle any other Firebase exception
+    }
+  }
+
+  // Optionally disable Firestore network if needed
   await FirebaseFirestore.instance.disableNetwork();
   Bloc.observer = MyBlocObserver();
 
-  runApp(MultiProvider(
+  runApp(
+    MultiProvider(
       providers: [ChangeNotifierProvider(create: (context) => Providerr())],
-      child: MyApp()));
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyBlocObserver extends BlocObserver {

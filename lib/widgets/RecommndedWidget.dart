@@ -82,55 +82,97 @@ class _RecommndedwidgetState extends State<Recommndedwidget> {
                       final isfav =
                           snapshot.data ?? false; // Check if movie is favorited
 
-                      return Stack(
+                      return Column(
                         children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                MovieDetailsPage.routeName,
-                                arguments: {
-                                  'movieID': movie.id.toString(),
-                                  'movieslist': data
+                          Stack(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    MovieDetailsPage.routeName,
+                                    arguments: {
+                                      'movieID': movie.id.toString(),
+                                      'movieslist': data
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                            child: Image.network(
-                              height: 400.h,
-                              width: 110.w,
-                              '${Const.imagepath}${movie.posterPath}', // Ensure this is a full URL or handle base URL
-                              filterQuality: FilterQuality.high,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Positioned(
-                            top: -5.h,
-                            right: 75.w,
-                            child: IconButton(
-                              onPressed: () async {
-                                if (isfav) {
-                                  // If it's in the watchlist, remove it
-                                  Firestore.removeMovieByTitle(movie.title!);
-                                } else {
-                                  // If it's not in the watchlist, add it
-                                  Firestore.addMovieToFirestore(
-                                      context,
-                                      movie.title ?? '',
-                                      '${Const.imagepath}${movie.posterPath}' ??
-                                          '',
-                                      movie.overview ?? "");
-                                }
-                                widget.toggleBookmark(movie.id ?? 1);
-                              },
-                              icon: Icon(
-                                isfav
-                                    ? Icons.bookmark_added_outlined
-                                    : Icons.bookmark_add_outlined,
-                                color: isfav ? Colors.yellow : Colors.white,
-                                size: 31.sp,
+                                child: Image.network(
+                                  height: 150.h,
+                                  width: 120.w,
+                                  '${Const.imagepath}${movie.posterPath}', // Ensure this is a full URL or handle base URL
+                                  filterQuality: FilterQuality.high,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                            ),
+                              Positioned(
+                                top: -5.h,
+                                right: 75.w,
+                                child: IconButton(
+                                  onPressed: () async {
+                                    if (isfav) {
+                                      // If it's in the watchlist, remove it
+                                      Firestore.removeMovieByTitle(
+                                          movie.title!);
+                                    } else {
+                                      // If it's not in the watchlist, add it
+                                      Firestore.addMovieToFirestore(
+                                          context,
+                                          movie.title ?? '',
+                                          '${Const.imagepath}${movie.posterPath}' ??
+                                              '',
+                                          movie.overview ?? "");
+                                    }
+                                    widget.toggleBookmark(movie.id ?? 1);
+                                  },
+                                  icon: Icon(
+                                    isfav
+                                        ? Icons.bookmark_added
+                                        : Icons.bookmark_add,
+                                    color: isfav ? Colors.yellow : Colors.white,
+                                    size: 31.sp,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
+                          Container(
+                            color: Color(0xff282A28),
+                            width: 110,
+                            height: 110,
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                      size: 20,
+                                    ),
+                                    Text(
+                                      '${movie.voteAverage}',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  '${movie.title}',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      movie.releaseDate! ?? '',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          )
                         ],
                       );
                     },

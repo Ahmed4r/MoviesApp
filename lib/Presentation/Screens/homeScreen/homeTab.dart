@@ -9,7 +9,6 @@ import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabStates.d
 import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabViewmodel.dart';
 
 import 'package:movies_app/Shared/app_color.dart';
-import 'package:movies_app/data/FireStore/FireStore.dart';
 
 import 'package:movies_app/data/api/Api_manger.dart';
 import 'package:movies_app/data/api/const.dart';
@@ -42,7 +41,6 @@ class _HomeTabState extends State<HomeTab> {
   void toggleBookmark(int movieID) {
     setState(() {
       favoriteMovies[movieID] = !(favoriteMovies[movieID] ?? false);
-      isfav != isfav;
     });
   }
 
@@ -85,9 +83,6 @@ class _HomeTabState extends State<HomeTab> {
                         /// The color to paint behind th indicator.
                         indicatorBackgroundColor: Colors.grey,
                         children: [
-                          //   for (int i = 0; i < sliderImages.length; i++)
-                          //     sliderImages[i]
-                          // )
                           for (int i = 0; i < movies.length; i++)
                             Stack(
                               children: [
@@ -101,7 +96,7 @@ class _HomeTabState extends State<HomeTab> {
                                         width: 412.w,
                                         height: 217.h,
                                         child: Image.network(
-                                          '${Const.imagepath}${movies[i].backdropPath}',
+                                          '${Const.imagepath}${movies[i].posterPath}',
                                           filterQuality: FilterQuality.high,
                                           fit: BoxFit.cover,
                                         ),
@@ -118,35 +113,16 @@ class _HomeTabState extends State<HomeTab> {
                                           255, 222, 214, 214),
                                     ),
                                     child: IconButton(
-                                      onPressed: () async {
-                                        // Fetch movie details
+                                      onPressed: () {
+                                        final currentID = movies[i].id;
+                                        final mvID = currentID;
                                         detailsPage.moviecubit
-                                            .getMovie(movies[i].id.toString());
+                                            .getMovie(mvID.toString());
+                                        print(currentID);
 
-                                        // Check if movie data is available
-                                        if (detailsPage.moviecubit.movie !=
-                                            null) {
-                                          final String imdbId = detailsPage
-                                                  .moviecubit.movie.imdbId ??
-                                              '';
-
-                                          if (imdbId.isNotEmpty) {
-                                            final Uri url = Uri.parse(
-                                                '${Const.imdb}$imdbId');
-                                            print('Launching URL: $url');
-
-                                            // Launch URL
-                                            try {
-                                              await _launchUrl(url);
-                                            } catch (e) {
-                                              log('Error launching URL: $e');
-                                            }
-                                          } else {
-                                            log('IMDb ID not found for movie: ${movies[i].title}');
-                                          }
-                                        } else {
-                                          log('Movie details not available for movie: ${movies[i].title}');
-                                        }
+                                        Uri url = Uri.parse(
+                                            '${Const.imdb}${detailsPage.moviecubit.movie.imdbId}');
+                                        _launchUrl(url);
                                       },
                                       icon: Icon(
                                         Icons.play_arrow,
@@ -172,38 +148,29 @@ class _HomeTabState extends State<HomeTab> {
                                               fit: BoxFit.cover,
                                             ),
                                           ),
-                                          IconButton(
-                                            onPressed: () {
-                                              toggleBookmark(movies[i].id!);
-                                              // isfav = true;
-                                              if (isfav) {
-                                                // If it's in the watchlist, remove it
-                                                Firestore.removeMovieByTitle(
-                                                    movies[i].title!);
-                                              } else {
-                                                // If it's not in the watchlist, add it
-                                                Firestore.addMovieToFirestore(
-                                                    context,
-                                                    movies[i].title ?? '',
-                                                    '${Const.imagepath}${movies[i].posterPath}' ??
-                                                        '',
-                                                    movies[i].overview ?? "");
-                                              }
-                                            },
-                                            icon: Icon(
-                                              favoriteMovies[movies[i].id] ==
-                                                      true
-                                                  ? Icons
-                                                      .bookmark_added_outlined
-                                                  : Icons.bookmark_add_outlined,
-                                              color: favoriteMovies[
-                                                          movies[i].id] ==
-                                                      true
-                                                  ? Colors.amber
-                                                  : Colors.white,
-                                              size: 31.sp,
+                                          Positioned(
+                                            bottom: 145.h,
+                                            right: 96.w,
+                                            child: IconButton(
+                                              onPressed: () {
+                                                toggleBookmark(
+                                                    movies[i].id ?? 1);
+                                                print('${movies[i].id}');
+                                              },
+                                              icon: Icon(
+                                                favoriteMovies[movies[i].id] ==
+                                                        true
+                                                    ? Icons.bookmark_added
+                                                    : Icons.bookmark_add,
+                                                color: favoriteMovies[
+                                                            movies[i].id] ==
+                                                        true
+                                                    ? Colors.yellow
+                                                    : Colors.white,
+                                                size: 30.sp,
+                                              ),
                                             ),
-                                          )
+                                          ),
                                         ],
                                       ),
                                     ],
@@ -243,6 +210,9 @@ class _HomeTabState extends State<HomeTab> {
                                                 fontSize: 14.sp,
                                               ),
                                             ),
+                                            SizedBox(
+                                              width: 90,
+                                            ),
                                             IconButton(
                                               onPressed: () {
                                                 Navigator.pushNamed(context,
@@ -255,7 +225,7 @@ class _HomeTabState extends State<HomeTab> {
                                                     });
                                               },
                                               icon: Icon(
-                                                Icons.info,
+                                                Icons.info_outline,
                                                 color: Colors.white,
                                                 size: 30,
                                               ),
@@ -273,7 +243,7 @@ class _HomeTabState extends State<HomeTab> {
                   ),
                   Container(
                     color: const Color(0xff282A28),
-                    height: 210.h,
+                    height: 220.h,
                     width: 455.w,
                     child: Newrealseswidget(
                       snapshot: ApiManager.getNewRealeases(),
@@ -285,7 +255,7 @@ class _HomeTabState extends State<HomeTab> {
                   SizedBox(height: 30.h),
                   Container(
                     color: const Color(0xff282A28),
-                    height: 210.h,
+                    height: 322.h,
                     width: 455.w,
                     child: Recommndedwidget(
                       favoriteMovies: favoriteMovies,

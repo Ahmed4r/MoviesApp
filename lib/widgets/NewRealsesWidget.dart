@@ -58,7 +58,6 @@ class Newrealseswidget extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final movie = data[index];
 
-                  // Use FutureBuilder to handle async check for each movie's favorite status
                   return FutureBuilder<bool>(
                     future: Firestore.isMovieInWatchlist(movie.title!),
                     builder: (context, snapshot) {
@@ -92,8 +91,8 @@ class Newrealseswidget extends StatelessWidget {
                             },
                             child: Expanded(
                               child: Image.network(
-                                height: 400.h,
-                                width: 110.w,
+                                height: 150.h,
+                                width: 120.w,
                                 '${Const.imagepath}${movie.posterPath}', // Ensure this is a full URL or handle base URL
                                 filterQuality: FilterQuality.high,
                                 fit: BoxFit.cover,
@@ -102,7 +101,7 @@ class Newrealseswidget extends StatelessWidget {
                           ),
                           Positioned(
                             top: -5.h,
-                            right: 75.w,
+                            right: 80.w,
                             child: IconButton(
                               onPressed: () async {
                                 if (isfav) {
@@ -121,8 +120,8 @@ class Newrealseswidget extends StatelessWidget {
                               },
                               icon: Icon(
                                 isfav
-                                    ? Icons.bookmark_added_outlined
-                                    : Icons.bookmark_add_outlined,
+                                    ? Icons.bookmark_added
+                                    : Icons.bookmark_add,
                                 color: isfav ? Colors.amber : Colors.white,
                                 size: 31.sp,
                               ),

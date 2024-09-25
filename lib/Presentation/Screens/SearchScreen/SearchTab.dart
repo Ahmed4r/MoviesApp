@@ -7,8 +7,14 @@ import 'package:movies_app/Presentation/Screens/homeScreen/Movie_details.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabViewmodel.dart';
 import 'package:movies_app/data/api/const.dart';
 
-class SearchTab extends StatelessWidget {
+class SearchTab extends StatefulWidget {
   static const String routename = 'searchtab';
+
+  @override
+  State<SearchTab> createState() => _SearchTabState();
+}
+
+class _SearchTabState extends State<SearchTab> {
   Hometabviewmodel movieCubit = Hometabviewmodel();
 
   @override
@@ -27,7 +33,6 @@ class SearchTab extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  // Search bar with improved styling
                   SizedBox(height: 50.h),
                   TextField(
                     style: TextStyle(fontSize: 20, color: Colors.white),
@@ -36,11 +41,11 @@ class SearchTab extends StatelessWidget {
                       viewmodel.searchMovie(search: value);
                     },
                     decoration: InputDecoration(
-                      icon: Icon(Icons.search, color: Colors.amber),
+                      prefixIcon: Icon(Icons.search, color: Colors.white),
                       labelText: 'Search For Movie',
                       labelStyle: TextStyle(color: Colors.white),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.amber, width: 1.0),
+                        borderSide: BorderSide(color: Colors.white),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -81,15 +86,15 @@ class SearchTab extends StatelessWidget {
                               margin: EdgeInsets.only(bottom: 15.0),
                               decoration: BoxDecoration(
                                 color: Colors.grey[850],
-                                borderRadius: BorderRadius.circular(8.0),
+                                borderRadius: BorderRadius.circular(12),
                               ),
                               child: Row(
                                 children: [
                                   Container(
-                                    width: 80.w,
-                                    height: 120.h,
+                                    width: 100.w,
+                                    height: 140.h,
                                     child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
+                                      borderRadius: BorderRadius.circular(5),
                                       child: Image.network(
                                         '${Const.imagepath}${movie.posterPath}',
                                         fit: BoxFit.cover,
@@ -99,13 +104,13 @@ class SearchTab extends StatelessWidget {
                                                 Center(
                                                     child: Icon(
                                           Icons.error,
-                                          color: Colors.white,
+                                          color: Colors.red,
                                         )),
                                       ),
                                     ),
                                   ),
 
-                                  SizedBox(width: 10.0),
+                                  SizedBox(width: 30.0),
 
                                   // Movie details with improved formatting
                                   Expanded(
@@ -118,7 +123,7 @@ class SearchTab extends StatelessWidget {
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 16
+                                            fontSize: 19
                                                 .sp, // Use ScreenUtil for responsive text size
                                             overflow: TextOverflow.ellipsis,
                                           ),
@@ -143,12 +148,24 @@ class SearchTab extends StatelessWidget {
                       ),
                     )
                   else if (state is SearchErrorState)
-                    Center(
-                      child: Text(
-                        'Error occurred while searching for movies , Movie Not found',
-                        style: TextStyle(color: Colors.red),
+                    Expanded(
+                        child: Center(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.local_movies_sharp,
+                              size: 114,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              'No Movies found',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
+                    )),
                 ],
               ),
             ),
