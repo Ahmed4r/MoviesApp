@@ -36,9 +36,6 @@ class MovieDetailsPage extends StatelessWidget {
         height: double.infinity,
         width: double.infinity,
         child: BlocBuilder<Moviedetailscubit, MovieDetailsStates>(
-
-            // bloc: moviecubit..getMovie(id),
-
             bloc: moviecubit..getMovie(id),
             builder: (context, state) {
               return state is MovieDetailsLoudingStates
@@ -294,7 +291,7 @@ class MovieDetailsPage extends StatelessWidget {
                                             });
                                       },
                                       child: MovieCard(
-                                        overView:data[index].overview,
+                                          overView: data[index].overview,
                                           rate: data[index]
                                               .voteAverage
                                               .toString(),
@@ -332,7 +329,10 @@ class MovieCard extends StatelessWidget {
   final String overView;
 
   const MovieCard(
-      {required this.title, required this.imageUrl, required this.rate, required this.overView});
+      {required this.title,
+      required this.imageUrl,
+      required this.rate,
+      required this.overView});
 
   @override
   Widget build(BuildContext context) {
@@ -362,9 +362,7 @@ class MovieCard extends StatelessWidget {
                 top: -8.h,
                 left: -11.w,
                 child: IconButton(
-                  onPressed: () {
-                 
-                  },
+                  onPressed: () {},
                   icon: Icon(
                     Icons.bookmark_add_outlined,
                     color: Colors.white,
@@ -399,5 +397,15 @@ class MovieCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void idwithdetails(context) {
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+
+    final id = arguments['movieID'];
+    Moviedetailscubit cubit = Moviedetailscubit();
+    cubit.getMovie(id.toString());
+    final imdp = '${Const.imdb}${cubit.movie.imdbId}';
   }
 }

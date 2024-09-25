@@ -55,16 +55,8 @@ class _HomeTabState extends State<HomeTab> {
           return Center(child: Text('Error: ${state.errorMessage}'));
         } else if (state is HometabSuccessStates) {
           final movies = state.response.results ?? [];
-          // final primeMovie = movies[0];
 
           return Scaffold(
-            // appBar: AppBar(
-            //   leading: IconButton(
-            //       onPressed: () async{
-            //         await Firestore.removeAllMovies();
-            //       },
-            //       icon: Icon(Icons.abc_outlined)),
-            // ),
             backgroundColor: Colors.black,
             body: SingleChildScrollView(
               child: Column(
@@ -94,9 +86,6 @@ class _HomeTabState extends State<HomeTab> {
                               /// The color to paint behind th indicator.
                               indicatorBackgroundColor: Colors.grey,
                               children: [
-                                //   for (int i = 0; i < sliderImages.length; i++)
-                                //     sliderImages[i]
-                                // )
                                 for (int i = 0; i < movies.length; i++)
                                   Stack(
                                     children: [
@@ -130,37 +119,16 @@ class _HomeTabState extends State<HomeTab> {
                                                 255, 222, 214, 214),
                                           ),
                                           child: IconButton(
-                                            onPressed: () async {
-                                              // Fetch movie details
-                                              detailsPage.moviecubit.getMovie(
-                                                  movies[i].id.toString());
+                                            onPressed: () {
+                                              final currentID = movies[i].id;
+                                              final mvID = currentID;
+                                              detailsPage.moviecubit
+                                                  .getMovie(mvID.toString());
+                                              print(currentID);
 
-                                              // Check if movie data is available
-                                              if (detailsPage
-                                                      .moviecubit.movie !=
-                                                  null) {
-                                                final String imdbId =
-                                                    detailsPage.moviecubit.movie
-                                                            .imdbId ??
-                                                        '';
-
-                                                if (imdbId.isNotEmpty) {
-                                                  final Uri url = Uri.parse(
-                                                      '${Const.imdb}$imdbId');
-                                                  print('Launching URL: $url');
-
-                                                  // Launch URL
-                                                  try {
-                                                    await _launchUrl(url);
-                                                  } catch (e) {
-                                                    log('Error launching URL: $e');
-                                                  }
-                                                } else {
-                                                  log('IMDb ID not found for movie: ${movies[i].title}');
-                                                }
-                                              } else {
-                                                log('Movie details not available for movie: ${movies[i].title}');
-                                              }
+                                              Uri url = Uri.parse(
+                                                  '${Const.imdb}${detailsPage.moviecubit.movie.imdbId}');
+                                              _launchUrl(url);
                                             },
                                             icon: Icon(
                                               Icons.play_arrow,
