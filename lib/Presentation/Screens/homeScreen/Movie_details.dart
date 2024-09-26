@@ -128,6 +128,7 @@ class MovieDetailsPage extends StatelessWidget {
                                     width: 100.w,
                                     child: TextButton(
                                         onPressed: () {
+                                          
                                           Firestore.addMovieToFirestore(
                                               context,
                                               moviecubit.movie.title ?? "",
@@ -171,7 +172,7 @@ class MovieDetailsPage extends StatelessWidget {
                                     children: [
                                       Container(
                                         child: Image.network(
-                                          "https://image.tmdb.org/t/p/original${moviecubit.movie.backdropPath}",
+                                          "https://image.tmdb.org/t/p/original${moviecubit.movie.posterPath}",
                                           height: 200.h,
                                           width: 150.w,
                                           fit: BoxFit.cover,
@@ -420,7 +421,7 @@ class _MovieCardState extends State<MovieCard> {
                 child: IconButton(
                   onPressed: () {
                     if (fav) {
-                      Firestore.removeMovieByTitle(widget.title);
+                      Firestore.removeMovieByTitle(context,widget.title);
                       fav = false;
                       setState(() {});
                     } else {
@@ -518,7 +519,7 @@ class _FavMovieCardState extends State<FavMovieCard> {
                 child: IconButton(
                   onPressed: () {
                     if (fav) {
-                      Firestore.removeMovieByTitle(widget.title);
+                      Firestore.removeMovieByTitle(context,widget.title);
                       fav = false;
                       setState(() {});
                     } else {

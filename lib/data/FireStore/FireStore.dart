@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:movies_app/Shared/SnackBar.dart';
 
 class Firestore {
   static Future<void> removeAllMovies() async {
@@ -11,7 +12,7 @@ class Firestore {
       // Get all documents in the 'FavMovie' collection
       QuerySnapshot querySnapshot = await movies.get();
 
-      // Loop through each document and delete it
+
       for (QueryDocumentSnapshot doc in querySnapshot.docs) {
         await doc.reference.delete();
       }
@@ -22,7 +23,8 @@ class Firestore {
     }
   }
 
-  static Future<void> removeMovieByTitle(String title) async {
+  static Future<void> removeMovieByTitle(
+      BuildContext context, String title) async {
     // Reference to Firestore collection 'FavMovie'
     CollectionReference movies =
         FirebaseFirestore.instance.collection('FavMovie');
@@ -34,6 +36,8 @@ class Firestore {
 
       // Loop through the documents and delete each one
       for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+        showSnackBar(context, '"$title" deleted successfully from WatchList');
+
         await doc.reference.delete();
         print('Movie with title "$title" deleted successfully');
       }
@@ -62,31 +66,26 @@ class Firestore {
     };
 
     try {
-      // Add movie details to Firestore
-      await movies.add(movieData);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 3),
-        content: Text('Movie added to Firestore'),
-        action: SnackBarAction(label: "close", onPressed: () {}),
-      ));
+      if (await isMovieInWatchlist(title) == false) {
+        showSnackBar(context, '"$title" Movie added to WatchList');
+        await movies.add(movieData);
 
-      print('Movie added to Firestore');
+        print('Movie added to Firestore');
+      } else {
+        showSnackBar(context, 'Movie is already added to WatchList');
+      }
+      // Add movie details to Firestore
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 3),
-        content: Text('Failed to add movie: $e'),
-        action: SnackBarAction(label: "close", onPressed: () {}),
-      ));
+      showSnackBar(context, 'Failed to add movie: $e');
+
       print('Failed to add movie: $e');
     }
   }
 
   static Future<bool> isMovieInWatchlist(String title) async {
     try {
-      // Log the title being searched
       print('Checking for movie with title: $title');
 
-      // Query Firestore to find a movie by title
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('FavMovie')
           .where('title', isEqualTo: title) // Search by title (case-sensitive)

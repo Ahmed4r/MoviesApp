@@ -110,7 +110,7 @@ class _RecommndedwidgetState extends State<Recommndedwidget> {
                               onPressed: () async {
                                 if (isfav) {
                                   // If it's in the watchlist, remove it
-                                  Firestore.removeMovieByTitle(movie.title!);
+                                  Firestore.removeMovieByTitle(context,movie.title!);
                                 } else {
                                   // If it's not in the watchlist, add it
                                   Firestore.addMovieToFirestore(

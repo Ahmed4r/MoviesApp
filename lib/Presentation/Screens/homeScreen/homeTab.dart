@@ -178,7 +178,7 @@ class _HomeTabState extends State<HomeTab> {
                                               // isfav = true;
                                               if (isfav) {
                                                 // If it's in the watchlist, remove it
-                                                Firestore.removeMovieByTitle(
+                                                Firestore.removeMovieByTitle(context,
                                                     movies[i].title!);
                                               } else {
                                                 // If it's not in the watchlist, add it

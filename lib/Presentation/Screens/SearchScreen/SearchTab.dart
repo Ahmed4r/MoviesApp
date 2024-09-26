@@ -73,7 +73,7 @@ class SearchTab extends StatelessWidget {
                                   context, MovieDetailsPage.routeName,
                                   arguments: {
                                     'movieID': movie.id.toString(),
-                                    'movieslist': movieCubit.movies
+                                    'movieslist': viewmodel.searchResults
                                   });
                             },
                             child: Container(

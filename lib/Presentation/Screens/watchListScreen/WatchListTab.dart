@@ -20,6 +20,24 @@ class _WatchListTabState extends State<WatchListTab> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        // actions: [
+        //   IconButton(
+        //       onPressed: () {
+        //         Firestore.removeAllMovies();
+        //          Future.delayed(const Duration(seconds: 1), () {
+        //         setState(() {});
+        //       });
+        //       },
+        //       icon: Row(
+        //         children: [
+        //           Text(
+        //             "Delete All",
+        //             style: TextThemee.bodymidWhite.copyWith(color: Colors.pink),
+        //           ),
+        //           Icon(Icons.delete_forever, color: Colors.pink)
+        //         ],
+        //       ))
+        // ],
         title: Text(
           'Watch List',
           style: TextThemee.bodyLargeWhite,
@@ -111,9 +129,12 @@ class _WatchListTabState extends State<WatchListTab> {
             ),
           ),
           IconButton(
-            onPressed: () async {
-              await Firestore.removeMovieByTitle(movie['title']);
-              setState(() {});
+            onPressed: () {
+              Firestore.removeMovieByTitle(context, movie['title']);
+
+              Future.delayed(const Duration(milliseconds: 100), () {
+                setState(() {});
+              });
             },
             icon: Icon(
               Icons.bookmark_added_outlined,
