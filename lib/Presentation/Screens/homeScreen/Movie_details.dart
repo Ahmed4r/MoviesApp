@@ -2,6 +2,7 @@
 
 import 'dart:ffi';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -87,13 +88,21 @@ class MovieDetailsPage extends StatelessWidget {
                             children: [
                               Stack(
                                 children: [
-                                  Image.network(
-                                    // moviecubit.movie.backdropPath??
-
-                                    "https://image.tmdb.org/t/p/original${moviecubit.movie.backdropPath}",
+                                  CachedNetworkImage(
                                     height: 200.h,
                                     width: double.infinity,
                                     fit: BoxFit.cover,
+                                    imageUrl:
+                                        "https://image.tmdb.org/t/p/original${moviecubit.movie.backdropPath}",
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            Transform.scale(
+                                      scale: .25,
+                                      child: CircularProgressIndicator(
+                                          value: downloadProgress.progress),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
                                   ),
                                   Center(
                                     heightFactor: 1.7,
@@ -120,15 +129,18 @@ class MovieDetailsPage extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    moviecubit.movie.title ?? "",
-                                    style: TextThemee.bodyLargeWhite,
+                                  Container(
+                                    width: MediaQuery.of(context).size.width.w -
+                                        100.w,
+                                    child: Text(
+                                      moviecubit.movie.title ?? "",
+                                      style: TextThemee.bodyLargeWhite,
+                                    ),
                                   ),
                                   Container(
                                     width: 100.w,
                                     child: TextButton(
                                         onPressed: () {
-                                          
                                           Firestore.addMovieToFirestore(
                                               context,
                                               moviecubit.movie.title ?? "",
@@ -171,12 +183,24 @@ class MovieDetailsPage extends StatelessWidget {
                                   Stack(
                                     children: [
                                       Container(
-                                        child: Image.network(
-                                          "https://image.tmdb.org/t/p/original${moviecubit.movie.posterPath}",
+                                        child: CachedNetworkImage(
                                           height: 200.h,
                                           width: 150.w,
                                           fit: BoxFit.cover,
                                           scale: 3,
+                                          imageUrl:
+                                              "https://image.tmdb.org/t/p/original${moviecubit.movie.posterPath}",
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              Transform.scale(
+                                            scaleX: .25,
+                                            scaleY: .25,
+                                            child: CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
                                         ),
                                       ),
                                     ],
@@ -304,8 +328,9 @@ class MovieDetailsPage extends StatelessWidget {
                                               MovieDetailsPage.routeName,
                                               arguments: {
                                                 'movieID':
-                                                    data[index].id.toString(),
-                                                "movieslist": data
+                                                    data[index].id.toString() ??
+                                                        '',
+                                                "movieslist": data ?? []
                                               });
                                         },
                                         child: FutureBuilder<bool>(
@@ -317,8 +342,11 @@ class MovieDetailsPage extends StatelessWidget {
                                               return Container(
                                                   height: 50.h,
                                                   width: 50.w,
-                                                  child:
-                                                      CircularProgressIndicator()); // You can show a loading spinner while checking
+                                                  child: Transform.scale(
+                                                      scaleX: .1,
+                                                      scaleY: .1,
+                                                      child:
+                                                          CircularProgressIndicator())); // You can show a loading spinner while checking
                                             } else if (snapshot.hasError) {
                                               return Text(
                                                   'Error: ${snapshot.error}');
@@ -408,11 +436,19 @@ class _MovieCardState extends State<MovieCard> {
           Stack(
             children: [
               Container(
-                child: Image.network(
-                  widget.imageUrl,
+                child: CachedNetworkImage(
                   width: 100.w,
                   fit: BoxFit.cover,
                   height: 130.h,
+                  imageUrl: widget.imageUrl,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Transform.scale(
+                    scaleX: .25,
+                    scaleY: .25,
+                    child: CircularProgressIndicator(
+                        value: downloadProgress.progress),
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),
               Positioned(
@@ -421,7 +457,7 @@ class _MovieCardState extends State<MovieCard> {
                 child: IconButton(
                   onPressed: () {
                     if (fav) {
-                      Firestore.removeMovieByTitle(context,widget.title);
+                      Firestore.removeMovieByTitle(context, widget.title);
                       fav = false;
                       setState(() {});
                     } else {
@@ -519,7 +555,7 @@ class _FavMovieCardState extends State<FavMovieCard> {
                 child: IconButton(
                   onPressed: () {
                     if (fav) {
-                      Firestore.removeMovieByTitle(context,widget.title);
+                      Firestore.removeMovieByTitle(context, widget.title);
                       fav = false;
                       setState(() {});
                     } else {
