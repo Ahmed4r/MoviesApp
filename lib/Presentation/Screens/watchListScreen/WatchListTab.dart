@@ -53,11 +53,23 @@ class _WatchListTabState extends State<WatchListTab> {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(
-              child: Text(
-                'No favorite movies found',
-                style: TextThemee.bodymidWhite,
-              ),
-            );
+          
+                child: Column(
+                  
+                  children: [
+                    SizedBox(height: 165.h,),
+                    Icon(
+                      Icons.movie,
+                      color: Colors.grey[850],
+                      size: 150,
+                    ),
+                    Text(
+                      "No Movies Found",
+                      style: TextThemee.bodymidWhite
+                          .copyWith(color: Colors.grey[200]),
+                    )
+                  ],
+                ));
           }
 
           // Data is available

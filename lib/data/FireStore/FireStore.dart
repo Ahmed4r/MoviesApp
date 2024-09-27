@@ -9,10 +9,8 @@ class Firestore {
         FirebaseFirestore.instance.collection('FavMovie');
 
     try {
-      // Get all documents in the 'FavMovie' collection
+      // Get all docs in the 'FavMovie' collection
       QuerySnapshot querySnapshot = await movies.get();
-
-
       for (QueryDocumentSnapshot doc in querySnapshot.docs) {
         await doc.reference.delete();
       }
@@ -68,9 +66,8 @@ class Firestore {
     try {
       if (await isMovieInWatchlist(title) == false) {
         showSnackBar(context, '"$title" Movie added to WatchList');
-        await movies.add(movieData);
-
         print('Movie added to Firestore');
+        await movies.add(movieData);
       } else {
         showSnackBar(context, 'Movie is already added to WatchList');
       }

@@ -2,6 +2,7 @@
 
 import 'dart:ffi';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -76,10 +77,31 @@ class MovieDetailsPage extends StatelessWidget {
                               // Handle back button press
                             },
                           ),
-                          title: Text(
-                            moviecubit.movie.originalTitle ?? '',
-                            style: TextThemee.bodyLargeWhite,
-                          ),
+                          title: AnimatedTextKit(
+                              repeatForever: true,
+                              pause: Duration(milliseconds: 1000),
+                              animatedTexts: [
+                                ColorizeAnimatedText(
+                                  speed: Duration(milliseconds: 300),
+                                  moviecubit.movie.originalTitle ?? '',
+                                  textStyle: TextThemee.bodyLargeWhite,
+                                  colors: [
+                                    Colors.white,
+                                    Colors.amber,
+                                    Colors.white,
+                                  ],
+                                ),
+                                ColorizeAnimatedText(
+                                  speed: Duration(milliseconds: 300),
+                                  "${moviecubit.movie.genres![0].name} Movie " ?? '',
+                                  textStyle: TextThemee.bodyLargeWhite,
+                                  colors: [
+                                    Colors.white,
+                                    Colors.amber,
+                                    Colors.white,
+                                  ],
+                                ),
+                              ]),
                           centerTitle: true,
                         ),
                         body: SingleChildScrollView(
@@ -171,10 +193,12 @@ class MovieDetailsPage extends StatelessWidget {
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   SizedBox(width: 10.w),
-                                  // Text(
-                                  //   '2h 7m',
-                                  //   style: TextStyle(color: Colors.white),
-                                  // ),
+                                  Text(
+                                    moviecubit.movie.originCountry != null
+                                        ? moviecubit.movie.originCountry![0]
+                                        : '',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ],
                               ),
                               SizedBox(height: 16),
@@ -182,25 +206,30 @@ class MovieDetailsPage extends StatelessWidget {
                                 children: [
                                   Stack(
                                     children: [
-                                      Container(
-                                        child: CachedNetworkImage(
-                                          height: 200.h,
-                                          width: 150.w,
-                                          fit: BoxFit.cover,
-                                          scale: 3,
-                                          imageUrl:
-                                              "https://image.tmdb.org/t/p/original${moviecubit.movie.posterPath}",
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              Transform.scale(
-                                            scaleX: .25,
-                                            scaleY: .25,
-                                            child: CircularProgressIndicator(
-                                                value:
-                                                    downloadProgress.progress),
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(5.r),
+                                        child: Container(
+                                          child: CachedNetworkImage(
+                                            height: 200.h,
+                                            width: 150.w,
+                                            fit: BoxFit.cover,
+                                            scale: 3,
+                                            imageUrl:
+                                                "https://image.tmdb.org/t/p/original${moviecubit.movie.posterPath}",
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                Transform.scale(
+                                              scaleX: .25,
+                                              scaleY: .25,
+                                              child: CircularProgressIndicator(
+                                                  value: downloadProgress
+                                                      .progress),
+                                            ),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Icon(Icons.error),
                                           ),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
                                         ),
                                       ),
                                     ],
@@ -247,6 +276,46 @@ class MovieDetailsPage extends StatelessWidget {
                                                     ),
                                                   ),
                                                 ),
+                                                moviecubit.movie.genres!
+                                                            .length ==
+                                                        2
+                                                    ? Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 11),
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 10,
+                                                                vertical: 8),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          border: Border.all(
+                                                              color: Colors
+                                                                  .white24),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                        ),
+                                                        child: Text(
+                                                          moviecubit.movie.genres !=
+                                                                      null &&
+                                                                  moviecubit
+                                                                      .movie
+                                                                      .genres!
+                                                                      .isNotEmpty
+                                                              ? moviecubit
+                                                                      .movie
+                                                                      .genres![
+                                                                          1]
+                                                                      .name ??
+                                                                  ''
+                                                              : "No Genre Available",
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 15.sp,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : SizedBox()
                                               ],
                                             ),
                                             SizedBox(
@@ -424,83 +493,85 @@ class _MovieCardState extends State<MovieCard> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: const Color.fromARGB(247, 31, 31, 31),
+        color: Colors.black,
       ),
       width: 130.w,
       height: 200.h,
-      margin: EdgeInsets.only(right: 16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Stack(
-            children: [
-              Container(
-                child: CachedNetworkImage(
-                  width: 100.w,
-                  fit: BoxFit.cover,
-                  height: 130.h,
-                  imageUrl: widget.imageUrl,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      Transform.scale(
-                    scaleX: .25,
-                    scaleY: .25,
-                    child: CircularProgressIndicator(
-                        value: downloadProgress.progress),
-                  ),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                ),
-              ),
-              Positioned(
-                top: -8.h,
-                left: -11.w,
-                child: IconButton(
-                  onPressed: () {
-                    if (fav) {
-                      Firestore.removeMovieByTitle(context, widget.title);
-                      fav = false;
-                      setState(() {});
-                    } else {
-                      Firestore.addMovieToFirestore(context, widget.title,
-                          widget.imageUrl, widget.overView);
-                      fav = true;
-                      setState(() {});
-                    }
-                  },
-                  icon: Icon(
-                    fav
-                        ? Icons.bookmark_added_outlined
-                        : Icons.bookmark_add_outlined,
-                    color: fav ? Colors.amber : Colors.white,
-                    size: 30.sp,
+      margin: EdgeInsets.symmetric(horizontal: 16.0),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                Container(
+                  child: CachedNetworkImage(
+                    width: 100.w,
+                    fit: BoxFit.cover,
+                    height: 130.h,
+                    imageUrl: widget.imageUrl,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Transform.scale(
+                      scaleX: .25,
+                      scaleY: .25,
+                      child: CircularProgressIndicator(
+                          value: downloadProgress.progress),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 8.h),
-          Row(
-            children: [
-              Icon(Icons.star, color: Colors.amber, size: 16),
-              SizedBox(width: 4.w),
-              Text(
-                widget.rate.substring(0, 3),
-                style: TextStyle(
-                  color: Colors.white,
+                Positioned(
+                  top: -8.h,
+                  left: -11.w,
+                  child: IconButton(
+                    onPressed: () {
+                      if (fav) {
+                        Firestore.removeMovieByTitle(context, widget.title);
+                        fav = false;
+                        setState(() {});
+                      } else {
+                        Firestore.addMovieToFirestore(context, widget.title,
+                            widget.imageUrl, widget.overView);
+                        fav = true;
+                        setState(() {});
+                      }
+                    },
+                    icon: Icon(
+                      fav
+                          ? Icons.bookmark_added_outlined
+                          : Icons.bookmark_add_outlined,
+                      color: fav ? Colors.amber : Colors.white,
+                      size: 30.sp,
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Text(
-            widget.title,
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+              ],
             ),
-          ),
-          SizedBox(height: 4.h),
-        ],
+            SizedBox(height: 8.h),
+            Row(
+              children: [
+                Icon(Icons.star, color: Colors.amber, size: 16),
+                SizedBox(width: 4.w),
+                Text(
+                  widget.rate.substring(0, 3),
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              widget.title,
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 4.h),
+          ],
+        ),
       ),
     );
   }
@@ -530,75 +601,77 @@ class _FavMovieCardState extends State<FavMovieCard> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: const Color.fromARGB(247, 31, 31, 31),
+        color: Colors.black,
       ),
       width: 130.w,
       height: 200.h,
       margin: EdgeInsets.only(right: 16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Stack(
-            children: [
-              Container(
-                child: Image.network(
-                  widget.imageUrl,
-                  width: 100.w,
-                  fit: BoxFit.cover,
-                  height: 130.h,
-                ),
-              ),
-              Positioned(
-                top: -8.h,
-                left: -11.w,
-                child: IconButton(
-                  onPressed: () {
-                    if (fav) {
-                      Firestore.removeMovieByTitle(context, widget.title);
-                      fav = false;
-                      setState(() {});
-                    } else {
-                      Firestore.addMovieToFirestore(context, widget.title,
-                          widget.imageUrl, widget.overView);
-                      fav = true;
-                      setState(() {});
-                    }
-                  },
-                  icon: Icon(
-                    fav
-                        ? Icons.bookmark_added_outlined
-                        : Icons.bookmark_add_outlined,
-                    color: fav ? Colors.amber : Colors.white,
-                    size: 30.sp,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                Container(
+                  child: Image.network(
+                    widget.imageUrl,
+                    width: 100.w,
+                    fit: BoxFit.cover,
+                    height: 130.h,
                   ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 8.h),
-          Row(
-            children: [
-              Icon(Icons.star, color: Colors.amber, size: 16),
-              SizedBox(width: 4.w),
-              Text(
-                widget.rate.substring(0, 3),
-                style: TextStyle(
-                  color: Colors.white,
+                Positioned(
+                  top: -8.h,
+                  left: -11.w,
+                  child: IconButton(
+                    onPressed: () {
+                      if (fav) {
+                        Firestore.removeMovieByTitle(context, widget.title);
+                        fav = false;
+                        setState(() {});
+                      } else {
+                        Firestore.addMovieToFirestore(context, widget.title,
+                            widget.imageUrl, widget.overView);
+                        fav = true;
+                        setState(() {});
+                      }
+                    },
+                    icon: Icon(
+                      fav
+                          ? Icons.bookmark_added_outlined
+                          : Icons.bookmark_add_outlined,
+                      color: fav ? Colors.amber : Colors.white,
+                      size: 30.sp,
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Text(
-            widget.title,
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+              ],
             ),
-          ),
-          SizedBox(height: 4.h),
-        ],
+            SizedBox(height: 8.h),
+            Row(
+              children: [
+                Icon(Icons.star, color: Colors.amber, size: 16),
+                SizedBox(width: 4.w),
+                Text(
+                  widget.rate.substring(0, 3),
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              widget.title,
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 4.h),
+          ],
+        ),
       ),
     );
   }

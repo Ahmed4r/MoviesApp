@@ -5,6 +5,7 @@ import 'package:movies_app/Presentation/Screens/SearchScreen/cubit/searchCubit.d
 import 'package:movies_app/Presentation/Screens/SearchScreen/cubit/searchStates.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/Movie_details.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabViewmodel.dart';
+import 'package:movies_app/Shared/Text_Theme.dart';
 import 'package:movies_app/data/api/const.dart';
 
 class SearchTab extends StatelessWidget {
@@ -60,6 +61,15 @@ class SearchTab extends StatelessWidget {
                   if (state is SearchLoadingState)
                     Center(
                       child: CircularProgressIndicator(color: Colors.white),
+                    )
+                    else if(state is SearchInitState)
+                    Center(heightFactor: 8/4,
+                      child: Column(
+                        children: [
+                          Icon(Icons.movie,color:Colors.grey[850],size: 150,),
+                          Text("No Movies Found",style: TextThemee.bodymidWhite.copyWith(color: Colors.grey[200]),)
+                        ],
+                      )
                     )
                   else if (state is SearchSuccessState)
                     Expanded(
@@ -144,11 +154,13 @@ class SearchTab extends StatelessWidget {
                     )
                   else if (state is SearchErrorState)
                     Center(
-                      child: Text(
-                        'Error occurred while searching for movies , Movie Not found',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
+                      child: Column(
+                        children: [
+                          Icon(Icons.movie,color:Colors.grey[850],size: 150,),
+                          Text("No Movies Found",style: TextThemee.bodymidWhite.copyWith(color: Colors.grey[200]),)
+                        ],
+                      )
+                    )
                 ],
               ),
             ),
