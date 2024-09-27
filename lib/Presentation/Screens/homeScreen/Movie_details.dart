@@ -7,6 +7,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movies_app/Presentation/Screens/browse/MovieList.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/cubit/favcubit.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/homeTab.dart';
 import 'package:movies_app/Provider/Provider.dart';
@@ -93,7 +94,8 @@ class MovieDetailsPage extends StatelessWidget {
                                 ),
                                 ColorizeAnimatedText(
                                   speed: Duration(milliseconds: 300),
-                                  "${moviecubit.movie.genres![0].name} Movie " ?? '',
+                                  "${moviecubit.movie.genres![0].name} Movie " ??
+                                      '',
                                   textStyle: TextThemee.bodyLargeWhite,
                                   colors: [
                                     Colors.white,
@@ -246,72 +248,125 @@ class MovieDetailsPage extends StatelessWidget {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               children: [
-                                                Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 8),
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.white24),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                  ),
-                                                  child: Text(
-                                                    moviecubit.movie.genres !=
-                                                                null &&
-                                                            moviecubit
-                                                                .movie
-                                                                .genres!
-                                                                .isNotEmpty
-                                                        ? moviecubit
-                                                                .movie
-                                                                .genres![0]
-                                                                .name ??
-                                                            ''
-                                                        : "No Genre Available",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 15.sp,
+                                                InkWell(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            MovieList(
+                                                          genreId: moviecubit
+                                                                  .movie
+                                                                  .genres![0]
+                                                                  .id ??
+                                                              0,
+                                                          genreName: moviecubit
+                                                                  .movie
+                                                                  .genres![0]
+                                                                  .name ??
+                                                              "",
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10,
+                                                            vertical: 8),
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color:
+                                                              Colors.white24),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                    ),
+                                                    child: Text(
+                                                      moviecubit.movie.genres !=
+                                                                  null &&
+                                                              moviecubit
+                                                                  .movie
+                                                                  .genres!
+                                                                  .isNotEmpty
+                                                          ? moviecubit
+                                                                  .movie
+                                                                  .genres![0]
+                                                                  .name ??
+                                                              ''
+                                                          : "No Genre Available",
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 15.sp,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                                 moviecubit.movie.genres!
                                                             .length ==
                                                         2
-                                                    ? Container(
-                                                        margin: EdgeInsets.only(
-                                                            left: 11),
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 10,
-                                                                vertical: 8),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          border: Border.all(
-                                                              color: Colors
-                                                                  .white24),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(8),
-                                                        ),
-                                                        child: Text(
-                                                          moviecubit.movie.genres !=
-                                                                      null &&
-                                                                  moviecubit
-                                                                      .movie
-                                                                      .genres!
-                                                                      .isNotEmpty
-                                                              ? moviecubit
-                                                                      .movie
-                                                                      .genres![
-                                                                          1]
-                                                                      .name ??
-                                                                  ''
-                                                              : "No Genre Available",
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 15.sp,
+                                                    ? InkWell(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      MovieList(
+                                                                genreId: moviecubit
+                                                                        .movie
+                                                                        .genres![
+                                                                            1]
+                                                                        .id ??
+                                                                    0,
+                                                                genreName: moviecubit
+                                                                        .movie
+                                                                        .genres![
+                                                                            1]
+                                                                        .name ??
+                                                                    "",
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  left: 11),
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      10,
+                                                                  vertical: 8),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            border: Border.all(
+                                                                color: Colors
+                                                                    .white24),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8),
+                                                          ),
+                                                          child: Text(
+                                                            moviecubit.movie.genres !=
+                                                                        null &&
+                                                                    moviecubit
+                                                                        .movie
+                                                                        .genres!
+                                                                        .isNotEmpty
+                                                                ? moviecubit
+                                                                        .movie
+                                                                        .genres![
+                                                                            1]
+                                                                        .name ??
+                                                                    ''
+                                                                : "No Genre Available",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 15.sp,
+                                                            ),
                                                           ),
                                                         ),
                                                       )
