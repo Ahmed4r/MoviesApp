@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/Presentation/Screens/browse/MovieList.dart';
 
 class GridItem extends StatelessWidget {
   final String genreName;
+  final String imageUrl;
+  final int genreId;
 
-  const GridItem({Key? key, required this.genreName}) : super(key: key);
+  GridItem({
+    Key? key,
+    required this.genreName,
+    required this.imageUrl,
+    required this.genreId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,26 +21,37 @@ class GridItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Center(
-        child: Stack(
-          children: [
-            InkWell(
-                child: Image.network(
-                  'https://siskiyou.sou.edu/wp-content/uploads/2022/03/intro-1644532027.webp',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MovieList(
+                  genreId: genreId,
+                  genreName: genreName,
                 ),
-                onTap: () {}), // Handle tap if needed
-            Center(
-              child: Text(
-                genreName,
-                style: TextStyle(
-                    fontSize: 25,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
               ),
-            ),
-          ],
+            );
+          },
+          child: Stack(
+            children: [
+              Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              ),
+              Center(
+                child: Text(
+                  genreName,
+                  style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
