@@ -6,6 +6,8 @@ import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
 class Hometabviewmodel extends Cubit<HomeTabstates> {
   Hometabviewmodel() : super(HomeTabInitalState());
   List<Movie> movies = [];
+
+  
   void showMovies() async {
     try {
       emit(HomeTabLoadingState());
