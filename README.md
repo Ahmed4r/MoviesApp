@@ -28,7 +28,7 @@ A Flutter application for browsing and discovering movies, with features like tr
 
 | Home Screen                            | Movie Details                               | Watchlist                                 | Browse                              | watchList                                 |
 | -------------------------------------- | ------------------------------------------- | ----------------------------------------- | ----------------------------------- | ----------------------------------------- |
-| ![Home Screen](assets\images\home.png) | ![Movie Details](assets\images\details.png) | ![Watchlist](assets\images\watchlist.png) | ![Browse](assets\images\browse.png) | ![watchList](assets\images\watchlist.png) |
+| ![Home Screen](assets/images/home.png) | ![Movie Details](assets/images/details.png) | ![Watchlist](assets/images/watchlist.png) | ![Browse](assets/images/browse.png) | ![watchList](assets/images/watchlist.png) |
 
 ## 🚀 Getting Started
 
@@ -54,22 +54,7 @@ A Flutter application for browsing and discovering movies, with features like tr
    flutter pub get
    ```
 
-3. Configure Firebase:
-
-   - Create a new Firebase project
-   - Add Android/iOS app to Firebase
-   - Download and add `google-services.json` to `android/app/`
-   - Add `GoogleService-Info.plist` to iOS project
-
-4. Add TMDB API key:
-
-   - Create a `.env` file in the root directory
-   - Add your TMDB API key:
-     ```
-     TMDB_API_KEY=your_api_key_here
-     ```
-
-5. Run the app:
+3. Run the app:
    ```bash
    flutter run
    ```
