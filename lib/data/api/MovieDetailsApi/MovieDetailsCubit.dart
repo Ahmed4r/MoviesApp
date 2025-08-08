@@ -7,7 +7,6 @@ class Moviedetailscubit extends Cubit<MovieDetailsStates> {
   Moviedetailscubit() : super(MovieDetailsInichialStates());
   MovieDetailsResponse movie = MovieDetailsResponse();
 
-
   void getMovie(String movieID) async {
     try {
       emit(MovieDetailsLoudingStates());

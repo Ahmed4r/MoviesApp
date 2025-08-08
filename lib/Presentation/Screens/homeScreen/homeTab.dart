@@ -1,13 +1,19 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/Movie_details.dart';
+import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabStates.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabViewmodel.dart';
+
+import 'package:movies_app/Shared/app_color.dart';
+import 'package:movies_app/data/FireStore/FireStore.dart';
+
 import 'package:movies_app/data/api/Api_manger.dart';
 import 'package:movies_app/data/api/const.dart';
-import 'package:movies_app/model/hometabmodel/NewRealeases.dart';
-import 'package:movies_app/model/hometabmodel/RecommendedResponse.dart';
 import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
 import 'package:movies_app/widgets/NewRealsesWidget.dart';
 import 'package:movies_app/widgets/RecommndedWidget.dart';
@@ -22,8 +28,10 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  static Map<int, bool> favoriteMovies = {};
   bool isfav = false;
   late Future<HometabResponse> hometabResponse;
+  MovieDetailsPage detailsPage = MovieDetailsPage();
 
   @override
   void initState() {
@@ -32,12 +40,57 @@ class _HomeTabState extends State<HomeTab> {
     widget.viewmodel.showMovies();
   }
 
-  final Uri _url = Uri.parse('https://www.youtube.com/watch?v=OzY2r2JXsDM');
-
-  void toggleBookmark() {
+  Future<void> toggleBookmark(Movie movie) async {
+    final movieId = movie.id!;
+    final isCurrentlyFavorite = favoriteMovies[movieId] ?? false;
+    
     setState(() {
-      isfav = !isfav;
+      // Update local state immediately for better UX
+      favoriteMovies[movieId] = !isCurrentlyFavorite;
     });
+
+    try {
+      if (isCurrentlyFavorite) {
+        // Remove from favorites
+        await Firestore.removeMovieByTitle(context, movie.title!);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Removed from watchlist')),
+          );
+        }
+      } else {
+        // Add to favorites
+        await Firestore.addMovieToFirestore(
+          context,
+          movie.title ?? 'Untitled',
+          '${Const.imagepath}${movie.posterPath ?? ''}',
+          movie.overview ?? 'No description available',
+        );
+      }
+      
+      // Refresh the list after a short delay
+      if (mounted) {
+        setState(() {
+          // Force a rebuild to update the UI
+          hometabResponse = hometabResponse.then((_) => _fetchMovies());
+        });
+      }
+    } catch (e) {
+      // Revert the UI if there's an error
+      if (mounted) {
+        setState(() {
+          favoriteMovies[movieId] = isCurrentlyFavorite;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to update watchlist: $e')),
+        );
+      }
+    }
+  }
+  
+  Future<HometabResponse> _fetchMovies() async {
+    // Force a fresh fetch of the data
+    return await ApiManager.getAllTopSide();
   }
 
   @override
@@ -45,171 +98,224 @@ class _HomeTabState extends State<HomeTab> {
     return BlocBuilder<Hometabviewmodel, HomeTabstates>(
       bloc: widget.viewmodel..showMovies(),
       builder: (BuildContext context, HomeTabstates state) {
-        if (state is HomeTabLoadingState) {
-          return Center(child: CircularProgressIndicator());
-        } else if (state is HometabErrostates) {
+        if (state is HometabErrostates) {
           return Center(child: Text('Error: ${state.errorMessage}'));
         } else if (state is HometabSuccessStates) {
           final movies = state.response.results ?? [];
+
           return Scaffold(
             backgroundColor: Colors.black,
             body: SingleChildScrollView(
               child: Column(
                 children: [
                   SizedBox(height: 50.h),
-                  Stack(
-                    children: [
-                      Container(
-                        width: 412.w,
-                        height: 300.h,
-                        color: Colors.black,
-                      ),
-                      movies.isNotEmpty
-                          ? Container(
-                              width: 412.w,
-                              height: 217.h,
-                              child: Image.network(
-                                '${Const.imagepath}${movies[12].posterPath}',
-                                filterQuality: FilterQuality.high,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                          : Center(child: CircularProgressIndicator()),
-                      Positioned(
-                        top: 77.h,
-                        left: 175.w,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            color: const Color.fromARGB(255, 222, 214, 214),
-                          ),
-                          child: IconButton(
-                            onPressed: _launchUrl,
-                            icon: Icon(
-                              Icons.play_arrow,
-                              size: 50.sp,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 20,
-                        top: 100.h,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
+                  Container(
+                    width: 412.w,
+                    // height: 500.h,
+                    color: Colors.black,
+                  ),
+                  Container(
+                    height: 310.h,
+                    child: ImageSlideshow(
+                        autoPlayInterval: 5000,
+                        isLoop: true,
+                        initialPage: 0,
+                        indicatorColor: Colors.blue,
+                        indicatorBackgroundColor: Colors.grey,
+                        children: [
+                          //   for (int i = 0; i < sliderImages.length; i++)
+                          //     sliderImages[i]
+                          // )
+                          for (int i = 0; i < movies.length; i++)
                             Stack(
                               children: [
                                 Container(
-                                  width: 129,
-                                  height: 180,
-                                  child: Image.network(
-                                    '${Const.imagepath}${movies.isNotEmpty ? movies[12].posterPath : ''}',
-                                    filterQuality: FilterQuality.high,
-                                    fit: BoxFit.cover,
+                                  width: 412.w,
+                                  height: 500.h,
+                                  color: Colors.black,
+                                ),
+                                movies.isNotEmpty
+                                    ? Container(
+                                        width: 412.w,
+                                        height: 217.h,
+                                        child: Image.network(
+                                          '${Const.imagepath}${movies[i].backdropPath}',
+                                          filterQuality: FilterQuality.high,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : Center(
+                                        child: CircularProgressIndicator()),
+                                Positioned(
+                                  top: 77.h,
+                                  left: 175.w,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(40),
+                                      color: const Color.fromARGB(
+                                          255, 222, 214, 214),
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () async {
+                                        // Fetch movie details
+                                        detailsPage.moviecubit
+                                            .getMovie(movies[i].id.toString());
+
+                                        // Check if movie data is available
+                                        if (detailsPage.moviecubit.movie !=
+                                            null) {
+                                          final String imdbId = detailsPage
+                                                  .moviecubit.movie.imdbId ??
+                                              '';
+
+                                          if (imdbId.isNotEmpty) {
+                                            final Uri url = Uri.parse(
+                                                '${Const.imdb}$imdbId');
+                                            print('Launching URL: $url');
+
+                                            // Launch URL
+                                            try {
+                                              await _launchUrl(url);
+                                            } catch (e) {
+                                              log('Error launching URL: $e');
+                                            }
+                                          } else {
+                                            log('IMDb ID not found for movie: ${movies[i].title}');
+                                          }
+                                        } else {
+                                          log('Movie details not available for movie: ${movies[i].title}');
+                                        }
+                                      },
+                                      icon: Icon(
+                                        Icons.play_arrow,
+                                        size: 50.sp,
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 Positioned(
-                                  top: -9.h,
-                                  left: -11.w,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      toggleBookmark();
-                                    },
-                                    icon: Icon(
-                                      isfav
-                                          ? Icons.bookmark_added_outlined
-                                          : Icons.bookmark_add_outlined,
-                                      color:
-                                          isfav ? Colors.yellow : Colors.white,
-                                      size: 30.sp,
-                                    ),
+                                  left: 20,
+                                  top: 100.h,
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          Container(
+                                            width: 129,
+                                            height: 180,
+                                            child: Image.network(
+                                              '${Const.imagepath}${movies.isNotEmpty ? movies[i].posterPath : ''}',
+                                              filterQuality: FilterQuality.high,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () async {
+                                              await toggleBookmark(movies[i]);
+                                            },
+                                            icon: Icon(
+                                              favoriteMovies[movies[i].id] ==
+                                                      true
+                                                  ? Icons
+                                                      .bookmark_added_outlined
+                                                  : Icons.bookmark_add_outlined,
+                                              color: favoriteMovies[
+                                                          movies[i].id] ==
+                                                      true
+                                                  ? Colors.amber
+                                                  : Colors.white,
+                                              size: 31.sp,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
                                   ),
+                                ),
+                                Positioned(
+                                  left: 160.w,
+                                  top: 200.h,
+                                  child: Row(children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${movies.isNotEmpty ? movies[i].title : ''}',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 24.sp,
+                                          ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              '${movies.isNotEmpty ? movies[i].originalLanguage : ''}',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14.sp,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              '${movies.isNotEmpty ? movies[i].releaseDate : ''}',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14.sp,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {
+                                                Navigator.pushNamed(context,
+                                                    MovieDetailsPage.routeName,
+                                                    arguments: {
+                                                      'movieID': movies[i]
+                                                          .id
+                                                          .toString(),
+                                                      'movieslist': movies
+                                                    });
+                                              },
+                                              icon: Icon(
+                                                Icons.info,
+                                                color: Colors.white,
+                                                size: 30,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(width: 100.w),
+                                  ]),
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        left: 160.w,
-                        top: 225.h,
-                        child: Row(children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${movies.isNotEmpty ? movies[12].title : ''}',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24.sp,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    '${movies.isNotEmpty ? movies[12].originalLanguage : ''}',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.sp,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    '${movies.isNotEmpty ? movies[12].releaseDate : ''}',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.sp,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                          context, MovieDetailsPage.routeName,
-                                          arguments: {
-                                          
-                                            'movieID': movies[12].id.toString(),
-                                            'movieslist':movies
-                                          });
-                                    },
-                                    icon: Icon(
-                                      Icons.info,
-                                      color: Colors.white,
-                                      size: 30,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(width: 100.w),
                         ]),
-                      ),
-                    ],
                   ),
                   Container(
                     color: const Color(0xff282A28),
-                    height: 187.h,
+                    height: 210.h,
                     width: 455.w,
                     child: Newrealseswidget(
                       snapshot: ApiManager.getNewRealeases(),
-                      isfav: isfav,
-                      toggleBookmark: toggleBookmark,
+                      onToggleBookmark: toggleBookmark,
+                      favoriteMovies: favoriteMovies,
                       title: 'New Releases',
                     ),
                   ),
                   SizedBox(height: 30.h),
                   Container(
                     color: const Color(0xff282A28),
-                    height: 187.h,
+                    height: 210.h,
                     width: 455.w,
                     child: Recommndedwidget(
-                      isfav: isfav,
+                      favoriteMovies: favoriteMovies,
+                      onToggleBookmark: toggleBookmark,
                       snapshot: ApiManager.getRecommended(),
                       title: 'Recommended',
-                      toggleBookmark: toggleBookmark,
                     ),
                   ),
                 ],
@@ -222,13 +328,19 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Future<void> _launchUrl() async {
-    if (!await launchUrl(
-      _url,
-      mode: LaunchMode.inAppWebView,
-      webViewConfiguration: const WebViewConfiguration(enableJavaScript: true),
-    )) {
-      throw Exception('Could not launch $_url');
+  Future<void> _launchUrl(Uri url) async {
+    try {
+      if (!await launchUrl(
+        url,
+        mode: LaunchMode
+            .externalApplication, // Use the appropriate mode for launching externally
+        webViewConfiguration:
+            const WebViewConfiguration(enableJavaScript: true),
+      )) {
+        throw Exception('Could not launch $url');
+      }
+    } catch (e) {
+      log('Failed to launch URL: $e');
     }
   }
 }

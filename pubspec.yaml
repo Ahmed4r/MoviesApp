@@ -39,6 +39,18 @@ dependencies:
 
   http: ^1.2.2
   url_launcher: ^6.3.0
+  readmore: ^3.0.0
+  flutter_image_slideshow: ^0.1.6
+  firebase_core: ^3.5.0
+  cloud_firestore: ^5.4.2
+
+
+  shared_preferences: ^2.3.2
+  provider: ^6.1.2
+  overflow_text_animated: ^0.0.6
+  cached_network_image: ^3.4.1
+  animated_text_kit: ^4.2.2
+
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +76,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/images/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
