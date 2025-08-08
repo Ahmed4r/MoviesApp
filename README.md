@@ -28,7 +28,7 @@ A Flutter application for browsing and discovering movies, with features like tr
 
 | Home Screen | Movie Details | Watchlist |
 |-------------|---------------|------------|
-| ![Home Screen](assets/splash.png) | ![Movie Details](assets/movie.png) | ![Watchlist](assets/Dora.jpg) |
+| ![Home Screen]("C:\Users\ahmed\porfilo\movies.png") | ![Movie Details](assets/movie.png) | ![Watchlist](assets/Dora.jpg) |
 
 ## 🚀 Getting Started
 
