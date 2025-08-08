@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/Movie_details.dart';
+import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabStates.dart';
 import 'package:movies_app/Presentation/Screens/homeScreen/cubit/hometabViewmodel.dart';
 
@@ -39,11 +40,57 @@ class _HomeTabState extends State<HomeTab> {
     widget.viewmodel.showMovies();
   }
 
-  void toggleBookmark(int movieID) {
+  Future<void> toggleBookmark(Movie movie) async {
+    final movieId = movie.id!;
+    final isCurrentlyFavorite = favoriteMovies[movieId] ?? false;
+    
     setState(() {
-      favoriteMovies[movieID] = !(favoriteMovies[movieID] ?? false);
-      isfav != isfav;
+      // Update local state immediately for better UX
+      favoriteMovies[movieId] = !isCurrentlyFavorite;
     });
+
+    try {
+      if (isCurrentlyFavorite) {
+        // Remove from favorites
+        await Firestore.removeMovieByTitle(context, movie.title!);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Removed from watchlist')),
+          );
+        }
+      } else {
+        // Add to favorites
+        await Firestore.addMovieToFirestore(
+          context,
+          movie.title ?? 'Untitled',
+          '${Const.imagepath}${movie.posterPath ?? ''}',
+          movie.overview ?? 'No description available',
+        );
+      }
+      
+      // Refresh the list after a short delay
+      if (mounted) {
+        setState(() {
+          // Force a rebuild to update the UI
+          hometabResponse = hometabResponse.then((_) => _fetchMovies());
+        });
+      }
+    } catch (e) {
+      // Revert the UI if there's an error
+      if (mounted) {
+        setState(() {
+          favoriteMovies[movieId] = isCurrentlyFavorite;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to update watchlist: $e')),
+        );
+      }
+    }
+  }
+  
+  Future<HometabResponse> _fetchMovies() async {
+    // Force a fresh fetch of the data
+    return await ApiManager.getAllTopSide();
   }
 
   @override
@@ -68,21 +115,12 @@ class _HomeTabState extends State<HomeTab> {
                     color: Colors.black,
                   ),
                   Container(
-                    height: 310,
+                    height: 310.h,
                     child: ImageSlideshow(
-
-                        /// Auto scroll interval.
-                        /// Do not auto scroll with null or 0.
                         autoPlayInterval: 5000,
-
-                        /// Loops back to first slide.
                         isLoop: true,
                         initialPage: 0,
-
-                        /// The color to paint the indicator.
                         indicatorColor: Colors.blue,
-
-                        /// The color to paint behind th indicator.
                         indicatorBackgroundColor: Colors.grey,
                         children: [
                           //   for (int i = 0; i < sliderImages.length; i++)
@@ -173,22 +211,8 @@ class _HomeTabState extends State<HomeTab> {
                                             ),
                                           ),
                                           IconButton(
-                                            onPressed: () {
-                                              toggleBookmark(movies[i].id!);
-                                              // isfav = true;
-                                              if (isfav) {
-                                                // If it's in the watchlist, remove it
-                                                Firestore.removeMovieByTitle(context,
-                                                    movies[i].title!);
-                                              } else {
-                                                // If it's not in the watchlist, add it
-                                                Firestore.addMovieToFirestore(
-                                                    context,
-                                                    movies[i].title ?? '',
-                                                    '${Const.imagepath}${movies[i].posterPath}' ??
-                                                        '',
-                                                    movies[i].overview ?? "");
-                                              }
+                                            onPressed: () async {
+                                              await toggleBookmark(movies[i]);
                                             },
                                             icon: Icon(
                                               favoriteMovies[movies[i].id] ==
@@ -211,7 +235,7 @@ class _HomeTabState extends State<HomeTab> {
                                 ),
                                 Positioned(
                                   left: 160.w,
-                                  top: 225.h,
+                                  top: 200.h,
                                   child: Row(children: [
                                     Column(
                                       crossAxisAlignment:
@@ -277,7 +301,7 @@ class _HomeTabState extends State<HomeTab> {
                     width: 455.w,
                     child: Newrealseswidget(
                       snapshot: ApiManager.getNewRealeases(),
-                      toggleBookmark: toggleBookmark,
+                      onToggleBookmark: toggleBookmark,
                       favoriteMovies: favoriteMovies,
                       title: 'New Releases',
                     ),
@@ -289,11 +313,9 @@ class _HomeTabState extends State<HomeTab> {
                     width: 455.w,
                     child: Recommndedwidget(
                       favoriteMovies: favoriteMovies,
-                      toggleBookmark: toggleBookmark,
-                      // isfav: isfav,
+                      onToggleBookmark: toggleBookmark,
                       snapshot: ApiManager.getRecommended(),
                       title: 'Recommended',
-                      // toggleBookmark: toggleBookmark,
                     ),
                   ),
                 ],

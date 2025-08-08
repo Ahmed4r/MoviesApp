@@ -4,19 +4,19 @@ import 'package:movies_app/Presentation/Screens/homeScreen/Movie_details.dart';
 import 'package:movies_app/data/FireStore/FireStore.dart';
 import 'package:movies_app/data/api/const.dart';
 import 'package:movies_app/model/hometabmodel/RecommendedResponse.dart';
+import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
 
 class Recommndedwidget extends StatefulWidget {
   final Future<List<RecommdedData>> snapshot;
   final String title;
-  final Map<int, bool>
-      favoriteMovies; // Add favoriteMovies to track favorite status
-  final Function(int) toggleBookmark; // Pass function to toggle bookmark status
+  final Map<int, bool> favoriteMovies;
+  final Function(Movie) onToggleBookmark; // Updated to use Movie object
 
   Recommndedwidget({
     required this.snapshot,
     required this.title,
-    required this.favoriteMovies, // Accept favoriteMovies map
-    required this.toggleBookmark, // Accept toggleBookmark callback
+    required this.favoriteMovies,
+    required this.onToggleBookmark,
     super.key,
   });
   Future<bool> getFav(String title) async {
@@ -108,19 +108,28 @@ class _RecommndedwidgetState extends State<Recommndedwidget> {
                             right: 75.w,
                             child: IconButton(
                               onPressed: () async {
-                                if (isfav) {
-                                  // If it's in the watchlist, remove it
-                                  Firestore.removeMovieByTitle(context,movie.title!);
-                                } else {
-                                  // If it's not in the watchlist, add it
-                                  Firestore.addMovieToFirestore(
-                                      context,
-                                      movie.title ?? '',
-                                      '${Const.imagepath}${movie.posterPath}' ??
-                                          '',
-                                      movie.overview ?? "");
-                                }
-                                widget.toggleBookmark(movie.id ?? 1);
+                                // Create a Movie object from the RecommdedData
+                                final movieObj = Movie(
+                                  id: movie.id,
+                                  title: movie.title,
+                                  posterPath: movie.posterPath,
+                                  overview: movie.overview,
+                                  isFavorite: isfav,
+                                  // Add other required fields with default values
+                                  adult: false,
+                                  backdropPath: '',
+                                  genreIds: const [],
+                                  originalLanguage: '',
+                                  originalTitle: '',
+                                  popularity: 0,
+                                  releaseDate: '',
+                                  video: false,
+                                  voteAverage: 0,
+                                  voteCount: 0,
+                                );
+                                
+                                // Call the parent's toggle handler
+                                await widget.onToggleBookmark(movieObj);
                               },
                               icon: Icon(
                                 isfav

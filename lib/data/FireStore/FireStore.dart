@@ -102,27 +102,44 @@ class Firestore {
   }
 
   static Future<List<Map<String, dynamic>>> getFavMovies() async {
+    print('getFavMovies() called');
     // Reference to Firestore collection 'FavMovie'
     CollectionReference movies =
         FirebaseFirestore.instance.collection('FavMovie');
 
     try {
+      print('Fetching movies from Firestore...');
       // Get all documents from the 'FavMovie' collection
       QuerySnapshot querySnapshot = await movies.get();
+      
+      print('Query snapshot has ${querySnapshot.docs.length} documents');
+      
+      if (querySnapshot.docs.isEmpty) {
+        print('No documents found in FavMovie collection');
+        return [];
+      }
+
+      // Log the first document to see what data we're getting
+      print('First document data: ${querySnapshot.docs.first.data()}');
 
       // Map each document to a list of movie data
       List<Map<String, dynamic>> favMovies = querySnapshot.docs.map((doc) {
+        print('Processing document: ${doc.id}');
+        print('Document data: ${doc.data()}');
+        
         return {
           'id': doc.id,
-          'title': doc['title'],
-          'imagePath': doc['imagePath'],
-          'description': doc['description'],
+          'title': doc['title'] ?? 'No Title',
+          'imagePath': doc['imagePath'] ?? '',
+          'description': doc['description'] ?? 'No Description',
         };
       }).toList();
 
+      print('Successfully mapped ${favMovies.length} movies');
       return favMovies;
-    } catch (e) {
+    } catch (e, stackTrace) {
       print('Failed to get movies: $e');
+      print('Stack trace: $stackTrace');
       return [];
     }
   }

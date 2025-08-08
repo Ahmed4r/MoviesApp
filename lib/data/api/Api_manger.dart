@@ -13,7 +13,7 @@ import 'package:movies_app/model/searchmodel/searchResponse.dart';
 
 class ApiManager {
   static const String baseUrl = "api.themoviedb.org";
-  static const String apiKey = "1e6afa8fe1adde6391e294c8b8f4a310";
+  static const String apiKey = "3d959f317b9ce9d57f24b5cf8220dda6";
 
   static Future<HometabResponse> getAllTopSide() async {
     try {
@@ -149,16 +149,14 @@ class ApiManager {
     };
     try {
       Uri url = Uri.https(
-          baseUrl, "${Endpoints.search_for_move_name}", {'query':Search});
-          
+          baseUrl, "${Endpoints.search_for_move_name}", {'query': Search});
+
       var response = await http.get(url, headers: headers);
       if (response.statusCode == 200 && response.statusCode < 300) {
         return SearchResponse.fromJson(jsonDecode(response.body));
-      }
-      else{
+      } else {
         throw Exception('Failed to load movie details: ${response.statusCode}');
       }
-      
     } catch (e) {
       throw e;
     }

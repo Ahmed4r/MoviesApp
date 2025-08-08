@@ -6,18 +6,19 @@ import 'package:movies_app/data/FireStore/FireStore.dart';
 
 import 'package:movies_app/data/api/const.dart';
 import 'package:movies_app/model/hometabmodel/NewRealeases.dart';
+import 'package:movies_app/model/hometabmodel/hometabResponse.dart';
 
 class Newrealseswidget extends StatelessWidget {
   final Future<List<Response>> snapshot;
   final String title;
   final Map<int, bool> favoriteMovies; // Map to track favorite status
-  final Function(int) toggleBookmark; // Function to toggle bookmark by movieID
+  final Function(Movie) onToggleBookmark; // Function to toggle bookmark by movie object
 
   Newrealseswidget({
     required this.snapshot,
     required this.title,
-    required this.favoriteMovies, // Pass the favoriteMovies map
-    required this.toggleBookmark, // Pass the toggleBookmark function
+    required this.favoriteMovies,
+    required this.onToggleBookmark,
     super.key,
   });
 
@@ -105,19 +106,28 @@ class Newrealseswidget extends StatelessWidget {
                             right: 75.w,
                             child: IconButton(
                               onPressed: () async {
-                                if (isfav) {
-                                  // If it's in the watchlist, remove it
-                                  Firestore.removeMovieByTitle(context,movie.title!);
-                                } else {
-                                  // If it's not in the watchlist, add it
-                                  Firestore.addMovieToFirestore(
-                                      context,
-                                      movie.title ?? '',
-                                      '${Const.imagepath}${movie.posterPath}' ??
-                                          '',
-                                      movie.overview ?? "");
-                                }
-                                toggleBookmark(movie.id ?? 1);
+                                // Create a Movie object from the Response
+                                final movieObj = Movie(
+                                  id: movie.id,
+                                  title: movie.title,
+                                  posterPath: movie.posterPath,
+                                  overview: movie.overview,
+                                  // Add other required fields with default values
+                                  isFavorite: isfav,
+                                  adult: false,
+                                  backdropPath: '',
+                                  genreIds: const [],
+                                  originalLanguage: '',
+                                  originalTitle: '',
+                                  popularity: 0,
+                                  releaseDate: '',
+                                  video: false,
+                                  voteAverage: 0,
+                                  voteCount: 0,
+                                );
+                                
+                                // Call the parent's toggle handler
+                                await onToggleBookmark(movieObj);
                               },
                               icon: Icon(
                                 isfav
