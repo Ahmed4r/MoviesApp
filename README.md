@@ -26,9 +26,9 @@ A Flutter application for browsing and discovering movies, with features like tr
 
 ## 🖼️ Screenshots
 
-| Home Screen | Movie Details | Watchlist |
-|-------------|---------------|------------|
-| ![Home Screen]("C:\Users\ahmed\porfilo\movies.png") | ![Movie Details](assets/movie.png) | ![Watchlist](assets/Dora.jpg) |
+| Home Screen                            | Movie Details                               | Watchlist                                 | Browse                              | watchList                                 |
+| -------------------------------------- | ------------------------------------------- | ----------------------------------------- | ----------------------------------- | ----------------------------------------- |
+| ![Home Screen](assets\images\home.png) | ![Movie Details](assets\images\details.png) | ![Watchlist](assets\images\watchlist.png) | ![Browse](assets\images\browse.png) | ![watchList](assets\images\watchlist.png) |
 
 ## 🚀 Getting Started
 
@@ -42,23 +42,27 @@ A Flutter application for browsing and discovering movies, with features like tr
 ### Setup
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/yourusername/MoviesApp.git
    cd MoviesApp
    ```
 
 2. Install dependencies:
+
    ```bash
    flutter pub get
    ```
 
 3. Configure Firebase:
+
    - Create a new Firebase project
    - Add Android/iOS app to Firebase
    - Download and add `google-services.json` to `android/app/`
    - Add `GoogleService-Info.plist` to iOS project
 
 4. Add TMDB API key:
+
    - Create a `.env` file in the root directory
    - Add your TMDB API key:
      ```
@@ -87,11 +91,10 @@ lib/
 ## 🔄 State Management
 
 The app uses a combination of:
+
 - **Provider** for dependency injection
 - **BLoC** for complex state management
 - **Firestore** for real-time data sync
-
-
 
 ## 🙏 Acknowledgments
 

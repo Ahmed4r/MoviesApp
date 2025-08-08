@@ -129,7 +129,7 @@ class MovieDetailsPage extends StatelessWidget {
                                         Icon(Icons.error),
                                   ),
                                   Center(
-                                    heightFactor: 1.7,
+                                    heightFactor: 1.7.h,
                                     // want make this responsive
 
                                     child: IconButton(
@@ -140,7 +140,7 @@ class MovieDetailsPage extends StatelessWidget {
                                       },
                                       icon: Icon(
                                         Icons.play_circle,
-                                        size: 90,
+                                        size: 90.r,
                                         color: const Color.fromARGB(
                                             197, 255, 255, 255),
                                       ),
@@ -151,7 +151,7 @@ class MovieDetailsPage extends StatelessWidget {
                               SizedBox(height: 16.h),
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Container(
                                     width: MediaQuery.of(context).size.width.w -
@@ -161,25 +161,22 @@ class MovieDetailsPage extends StatelessWidget {
                                       style: TextThemee.bodyLargeWhite,
                                     ),
                                   ),
-                                  Container(
-                                    width: 100.w,
-                                    child: TextButton(
-                                        onPressed: () {
-                                          Firestore.addMovieToFirestore(
-                                              context,
-                                              moviecubit.movie.title ?? "",
-                                              '${Const.imagepath}${moviecubit.movie.posterPath}' ??
-                                                  "",
-                                              moviecubit.movie.overview ?? "");
-                                        },
-                                        child: Text(
-                                          "Add To WatchList",
-                                          style: TextThemee.bodymidWhite
-                                              .copyWith(
-                                                  color: Colors.amber,
-                                                  fontSize: 15),
-                                        )),
-                                  )
+                                  Expanded(
+                                      child: TextButton(
+                                          onPressed: () {
+                                            Firestore.addMovieToFirestore(
+                                                context,
+                                                moviecubit.movie.title ?? "",
+                                                '${Const.imagepath}${moviecubit.movie.posterPath}' ??
+                                                    "",
+                                                moviecubit.movie.overview ??
+                                                    "");
+                                          },
+                                          child: Icon(
+                                            Icons.bookmark_add,
+                                            color: Colors.amber,
+                                            size: 30.r,
+                                          )))
                                 ],
                               ),
                               SizedBox(height: 8.h),
@@ -203,7 +200,7 @@ class MovieDetailsPage extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 16),
+                              SizedBox(height: 16.h),
                               Row(
                                 children: [
                                   Stack(
@@ -280,7 +277,7 @@ class MovieDetailsPage extends StatelessWidget {
                                                               Colors.white24),
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              8),
+                                                              8.r),
                                                     ),
                                                     child: Text(
                                                       moviecubit.movie.genres !=
@@ -377,7 +374,7 @@ class MovieDetailsPage extends StatelessWidget {
                                               height: 13.h,
                                             ),
                                             Container(
-                                              width: 150,
+                                              width: 150.w,
                                               child: ReadMoreText(
                                                 style: TextStyle(
                                                     color: Colors.white),
@@ -417,7 +414,7 @@ class MovieDetailsPage extends StatelessWidget {
                                                           .substring(0, 3) ??
                                                       "",
                                                   style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: 18.sp,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: Colors.white),
